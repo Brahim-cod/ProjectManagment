@@ -1,3 +1,4 @@
+from turtle import title
 from flask import Flask, jsonify, redirect, render_template, request, session, url_for
 from flask_mysqldb import MySQL
 import MySQLdb
@@ -24,12 +25,12 @@ mysql = MySQL(app)
 def home():
     if not 'loggedin' in session:
         return redirect(url_for('Login'))
-    return render_template('index.html')
+    return render_template('index.html', title = "Dashboard")
 
 
 @app.route('/userProfile')
 def userProfile():
-    return render_template('user-profile.html')
+    return render_template('user-profile.html', title = "User Profile")
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -114,7 +115,7 @@ def Logout():
 @app.route('/projects')
 def Projects():
     #Get all project from database
-    return render_template('project.html')
+    return render_template('project.html', title="Projects")
 
 # API
 
@@ -126,11 +127,7 @@ def customer_chart():
         'data': [40, 70, 20, 90, 36, 80, 30, 91, 60]
     }, {
         'name': "Doing",
-<<<<<<< HEAD
         'data': [80, 30, 50, 20, 76, 40, 20, 51, 10]
-=======
-        'data': [10, 30, 50, 20, 76, 40, 20, 51, 10]
->>>>>>> 170cc07085f775d824b228d7551ec16668abc6c2
     }],
     'colors': ['#3C21F7', '#FFCA1F'],
     'chart': {
