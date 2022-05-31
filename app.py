@@ -1,4 +1,3 @@
-from turtle import title
 from flask import Flask, jsonify, redirect, render_template, request, session, url_for
 from flask_mysqldb import MySQL
 import MySQLdb
