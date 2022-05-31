@@ -153,7 +153,17 @@ def customer_chart():
 def page_not_found(error):
     # return 'Erreur'
    return render_template('404.html', title = '404'), 404
-
+@app.route('/list', methods=['GET', 'POST'])
+def list():
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('SELECT * FROM EMP')
+    test=cursor.fetchall()
+    return jsonify(test)
+@app.route('/project-details')
+def projectdetails():
+    if not 'loggedin' in session:
+        return redirect(url_for('Login'))
+    return render_template('project-details.html', title = "Dashboard")
 
 if __name__ == '__main__':
     app.run(debug=True)
