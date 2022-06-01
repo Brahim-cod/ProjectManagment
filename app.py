@@ -9,8 +9,9 @@ app.secret_key = 'qOjLneE5QOa8AEF1GQGhQelVN3452Iwf'
 
 # Enter your database connection details below
 app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_PORT'] = 3307
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'saad123'
+app.config['MYSQL_PASSWORD'] = 'Ivws3135'
 app.config['MYSQL_DB'] = 'project'
 
 
@@ -78,13 +79,12 @@ def Login():
         # Create variables for easy access
         username = request.form['username']
         password = request.form['password']
-        print(password)
-                # Check if account exists using MySQL
+        # Check if account exists using MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM EMP WHERE username = %s AND pass = %s', (username, password,))
         # Fetch one record and return result
         account = cursor.fetchone()
-                # If account exists in accounts table in out database
+        # If account exists in accounts table in out database
         if account:
             # Create session data, we can access this data in other routes
             session['loggedin'] = True
@@ -96,8 +96,6 @@ def Login():
         else:
             # Account doesnt exist or username/password incorrect
             msg = 'Incorrect username/password!'
-            print('Incorrect')
-
     return render_template('user-login.html',msg = msg)
 
 @app.route('/logout')
@@ -117,6 +115,19 @@ def Projects():
     #Get all project from database
     return render_template('project.html', title="Projects")
 
+@app.route('/project-details/<int:id>')
+def projectdetails(id):
+    if not 'loggedin' in session:
+        return redirect(url_for('Login'))
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('SELECT * FROM projet WHERE projet_id = %s', (id,))
+    # Fetch one record and return result
+    projet = cursor.fetchone()
+    if projet is None:
+        return redirect(url_for('Login'))
+    return render_template('project-details.html', title = "Project Details", data = projet)
+
+        
 # API
 
 @app.route("/api/customer_chart")
@@ -151,18 +162,8 @@ def customer_chart():
 @app.errorhandler(404)
 def page_not_found(error):
     # return 'Erreur'
-   return render_template('404.html', title = '404'), 404
-@app.route('/list', methods=['GET', 'POST'])
-def list():
-    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute('SELECT * FROM EMP')
-    test=cursor.fetchall()
-    return jsonify(test)
-@app.route('/project-details')
-def projectdetails():
-    if not 'loggedin' in session:
-        return redirect(url_for('Login'))
-    return render_template('project-details.html', title = "Dashboard")
+    return render_template('404.html', title = 'error'), 404
+
 
 if __name__ == '__main__':
     app.run(debug=True)

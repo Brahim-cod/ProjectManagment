@@ -38,11 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-<<<<<<< Updated upstream
-VIRTUAL_ENV="C:\Users\hp\Documents\GitHub\ProjectManagment\venv"
-=======
 VIRTUAL_ENV="C:\Users\Osaka Gaming Maroc\Documents\GitHub\ProjectManagment\venv"
->>>>>>> Stashed changes
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
