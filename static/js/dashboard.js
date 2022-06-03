@@ -121,126 +121,136 @@
 
         var chartBar2 = function() {
 
-            var options = {
-                series: [{
-                        name: '',
-                        data: [50, 18, 70, 40, 90, 50],
-                        //radius: 12,	
-                    },
-                    {
-                        name: '',
-                        data: [80, 40, 55, 20, 50, 70]
-                    },
+            // var options = {
+            //     series: [{
+            //             name: '',
+            //             data: [50, 18, 70, 40, 90, 50],
+            //             //radius: 12,	
+            //         },
+            //         {
+            //             name: '',
+            //             data: [80, 40, 55, 20, 50, 70]
+            //         },
 
-                ],
-                chart: {
-                    type: 'bar',
-                    height: 350,
+            //     ],
+            //     chart: {
+            //         type: 'bar',
+            //         height: 350,
 
-                    toolbar: {
-                        show: false,
-                    },
+            //         toolbar: {
+            //             show: false,
+            //         },
 
-                },
-                plotOptions: {
-                    bar: {
-                        horizontal: false,
-                        columnWidth: '70%',
-                        borderRadius: 10
-                    },
+            //     },
+            //     plotOptions: {
+            //         bar: {
+            //             horizontal: false,
+            //             columnWidth: '70%',
+            //             borderRadius: 10
+            //         },
 
-                },
-                states: {
-                    hover: {
-                        filter: 'none',
-                    }
-                },
-                colors: ['#80ec67', '#fe7d65'],
-                dataLabels: {
-                    enabled: false,
-                },
-                markers: {
-                    shape: "circle",
-                },
+            //     },
+            //     states: {
+            //         hover: {
+            //             filter: 'none',
+            //         }
+            //     },
+            //     colors: ['#80ec67', '#fe7d65'],
+            //     dataLabels: {
+            //         enabled: false,
+            //     },
+            //     markers: {
+            //         shape: "circle",
+            //     },
 
 
-                legend: {
-                    position: 'top',
-                    horizontalAlign: 'right',
-                    show: false,
-                    fontSize: '12px',
-                    labels: {
-                        colors: '#000000',
+            //     legend: {
+            //         position: 'top',
+            //         horizontalAlign: 'right',
+            //         show: false,
+            //         fontSize: '12px',
+            //         labels: {
+            //             colors: '#000000',
 
-                    },
-                    markers: {
-                        width: 18,
-                        height: 18,
-                        strokeWidth: 0,
-                        strokeColor: '#fff',
-                        fillColors: undefined,
-                        radius: 12,
-                    }
-                },
-                stroke: {
-                    show: true,
-                    width: 5,
-                    colors: ['transparent']
-                },
-                grid: {
-                    borderColor: '#eee',
-                },
-                xaxis: {
+            //         },
+            //         markers: {
+            //             width: 18,
+            //             height: 18,
+            //             strokeWidth: 0,
+            //             strokeColor: '#fff',
+            //             fillColors: undefined,
+            //             radius: 12,
+            //         }
+            //     },
+            //     stroke: {
+            //         show: true,
+            //         width: 5,
+            //         colors: ['transparent']
+            //     },
+            //     grid: {
+            //         borderColor: '#eee',
+            //     },
+            //     xaxis: {
 
-                    categories: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
-                    labels: {
-                        style: {
-                            colors: '#3e4954',
-                            fontSize: '13px',
-                            fontFamily: 'poppins',
-                            fontWeight: 400,
-                            cssClass: 'apexcharts-xaxis-label',
-                        },
-                    },
-                    crosshairs: {
-                        show: false,
-                    }
-                },
-                yaxis: {
-                    labels: {
-                        offsetX: -16,
-                        style: {
-                            colors: '#3e4954',
-                            fontSize: '13px',
-                            fontFamily: 'poppins',
-                            fontWeight: 400,
-                            cssClass: 'apexcharts-xaxis-label',
-                        },
-                    },
-                },
-                fill: {
-                    opacity: 1,
-                    colors: ['#00BC8B', '#FFCA1F'],
-                },
-                tooltip: {
-                    y: {
-                        formatter: function(val) {
-                            return " " + val + " "
-                        }
-                    }
-                },
-                responsive: [{
-                    breakpoint: 575,
-                    options: {
-                        chart: {
-                            height: 250,
-                        }
-                    },
-                }]
-            };
+            //         categories: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+            //         labels: {
+            //             style: {
+            //                 colors: '#3e4954',
+            //                 fontSize: '13px',
+            //                 fontFamily: 'poppins',
+            //                 fontWeight: 400,
+            //                 cssClass: 'apexcharts-xaxis-label',
+            //             },
+            //         },
+            //         crosshairs: {
+            //             show: false,
+            //         }
+            //     },
+            //     yaxis: {
+            //         labels: {
+            //             offsetX: -16,
+            //             style: {
+            //                 colors: '#3e4954',
+            //                 fontSize: '13px',
+            //                 fontFamily: 'poppins',
+            //                 fontWeight: 400,
+            //                 cssClass: 'apexcharts-xaxis-label',
+            //             },
+            //         },
+            //     },
+            //     fill: {
+            //         opacity: 1,
+            //         colors: ['#00BC8B', '#FFCA1F'],
+            //     },
+            //     tooltip: {
+            //         y: {
+                        
+            //         }
+            //     },
+            //     responsive: [{
+            //         breakpoint: 575,
+            //         options: {
+            //             chart: {
+            //                 height: 250,
+            //             }
+            //         },
+            //     }]
+            // };
 
-            var chartBar2 = new ApexCharts(document.querySelector("#chartBar2"), options);
-            chartBar2.render();
+            // var chartBar2 = new ApexCharts(document.querySelector("#chartBar2"), options);
+            // chartBar2.render();
+
+            async function fetchOptionsJSON() {
+                const response = await fetch('/api/chartBar2');
+                const data = await response.json();
+                return data;
+            }
+            
+            
+            fetchOptionsJSON().then((data) => {
+                let chartBar2 = new ApexCharts(document.querySelector("#chartBar2"), data);
+                chartBar2.render(); 
+            });
         }
         var chartBar3 = function() {
 

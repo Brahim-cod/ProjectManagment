@@ -145,8 +145,128 @@ def customer_chart():
     },}
     return jsonify(customer_options)
 
+@app.route("/api/chartBar2")
+def chartBar2():
+    options = {
+                'series': [{
+                        'name': '',
+                        'data': [50, 18, 70, 40, 90, 50],
+                        #radius: 12,	
+                    },
+                    {
+                        'name': '',
+                        'data': [80, 40, 55, 20, 50, 70]
+                    },
+
+                ],
+                'chart': {
+                    'type': 'bar',
+                    'height': 350,
+
+                    'toolbar': {
+                        'show': False,
+                    },
+
+                },
+                'plotOptions': {
+                    'bar': {
+                        'horizontal': False,
+                        'columnWidth': '70%',
+                        'borderRadius': 10
+                    },
+
+                },
+                'states': {
+                    'hover': {
+                        'filter': 'none',
+                    }
+                },
+                'colors': ['#80ec67', '#fe7d65'],
+                'dataLabels': {
+                    'enabled': False,
+                },
+                'markers': {
+                    'shape': "circle",
+                },
 
 
+                'legend': {
+                    'position': 'top',
+                    'horizontalAlign': 'right',
+                    'show': False,
+                    'fontSize': '12px',
+                    'labels': {
+                        'colors': '#000000',
+
+                    },
+                    'markers': {
+                        'width': 18,
+                        'height': 18,
+                        'strokeWidth': 0,
+                        'strokeColor': '#fff',
+                        'fillColors': None,
+                        'radius': 12,
+                    }
+                },
+                'stroke': {
+                    'show': True,
+                    'width': 5,
+                    'colors': ['transparent']
+                },
+                'grid': {
+                    'borderColor': '#eee',
+                },
+                'xaxis': {
+
+                    'categories': ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+                    'labels': {
+                        'style': {
+                            'colors': '#3e4954',
+                            'fontSize': '13px',
+                            'fontFamily': 'poppins',
+                            'fontWeight': 400,
+                            'cssClass': 'apexcharts-xaxis-label',
+                        },
+                    },
+                    'crosshairs': {
+                        'show': False,
+                    }
+                },
+                'yaxis': {
+                    'labels': {
+                        'offsetX': -16,
+                        'style': {
+                            'colors': '#3e4954',
+                            'fontSize': '13px',
+                            'fontFamily': 'poppins',
+                            'fontWeight': 400,
+                            'cssClass': 'apexcharts-xaxis-label',
+                        },
+                    },
+                },
+                'fill': {
+                    'opacity': 1,
+                    'colors': ['#00BC8B', '#FFCA1F'],
+                },
+                'tooltip': {
+                    'y': {
+                            
+                         }
+                    },
+                'responsive': [{
+                    'breakpoint': 575,
+                    'options': {
+                        'chart': {
+                            'height': 250,
+                        }
+                    },
+                }]
+            }
+    return jsonify(options)
+
+
+def formatter(val):
+    return " " + val + " "
 # Error
 @app.errorhandler(404)
 def page_not_found(error):
