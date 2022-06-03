@@ -1,4 +1,3 @@
-from turtle import title
 from flask import Flask, jsonify, redirect, render_template, request, session, url_for
 from flask_mysqldb import MySQL
 import MySQLdb
@@ -10,11 +9,10 @@ app.secret_key = 'qOjLneE5QOa8AEF1GQGhQelVN3452Iwf'
 
 # Enter your database connection details below
 app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_PORT'] = 3307
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'Ivws3135'
-app.config['MYSQL_DB'] = 'pythonlogin'
-
-
+app.config['MYSQL_DB'] = 'project'
 
 
 # Intialize MySQL
@@ -38,14 +36,15 @@ def register():
     # Output message if something goes wrong...
     msg = ''
     # Check if "username", "password" and "email" POST requests exist (user submitted form)
-    if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form:
+    if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form and 'role' in request.form:
         # Create variables for easy access
         username = request.form['username']
         password = request.form['password']
         email = request.form['email']
+        role=request.form['role']
          # Check if account exists using MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM accounts WHERE username = %s', (username,))
+        cursor.execute('SELECT * FROM EMP WHERE username = %s', (username,))
         account = cursor.fetchone()
         # If account exists show error and validation checks
         if account:
@@ -54,11 +53,13 @@ def register():
             msg = 'Invalid email address!'
         elif not re.match(r'[A-Za-z0-9]+', username):
             msg = 'Username must contain only characters and numbers!'
-        elif not username or not password or not email:
+        elif not role :
+            msg='ROLE NOT FOUND'
+        elif not username or not password or not email or not role:
             msg = 'Please fill out the form!'
         else:
             # Account doesnt exists and the form data is valid, now insert new account into accounts table
-            cursor.execute('INSERT INTO accounts VALUES (NULL, %s, %s, %s)', (username, password, email,))
+            cursor.execute('INSERT INTO EMP VALUES (NULL, %s, %s,%s,%s)', (username, password,role ,email,))
             mysql.connection.commit()
             msg = 'You have successfully registered!'
     elif request.method == 'POST':
@@ -78,17 +79,16 @@ def Login():
         # Create variables for easy access
         username = request.form['username']
         password = request.form['password']
-        print(password)
-                # Check if account exists using MySQL
+        # Check if account exists using MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM accounts WHERE username = %s AND password = %s', (username, password,))
+        cursor.execute('SELECT * FROM EMP WHERE username = %s AND pass = %s', (username, password,))
         # Fetch one record and return result
         account = cursor.fetchone()
-                # If account exists in accounts table in out database
+        # If account exists in accounts table in out database
         if account:
             # Create session data, we can access this data in other routes
             session['loggedin'] = True
-            session['id'] = account['id']
+            session['emp_id'] = account['emp_id']
             session['username'] = account['username']
             session['email'] = account['email']
             # Redirect to home page
@@ -96,15 +96,13 @@ def Login():
         else:
             # Account doesnt exist or username/password incorrect
             msg = 'Incorrect username/password!'
-            print('Incorrect')
-
     return render_template('user-login.html',msg = msg)
 
 @app.route('/logout')
 def Logout():
     # Remove session data, this will log the user out
    session.pop('loggedin', None)
-   session.pop('id', None)
+   session.pop('emp_id', None)
    session.pop('username', None)
    session.pop('email', None)
    # Redirect to login page
@@ -117,6 +115,19 @@ def Projects():
     #Get all project from database
     return render_template('project.html', title="Projects")
 
+@app.route('/project-details/<int:id>')
+def projectdetails(id):
+    if not 'loggedin' in session:
+        return redirect(url_for('Login'))
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('SELECT * FROM projet WHERE projet_id = %s', (id,))
+    # Fetch one record and return result
+    projet = cursor.fetchone()
+    if projet is None:
+        return redirect(url_for('Login'))
+    return render_template('project-details.html', title = "Project Details", data = projet)
+
+        
 # API
 
 @app.route("/api/customer_chart")
@@ -271,7 +282,7 @@ def formatter(val):
 @app.errorhandler(404)
 def page_not_found(error):
     # return 'Erreur'
-   return render_template('404.html', title = '404'), 404
+    return render_template('404.html', title = 'error'), 404
 
 
 if __name__ == '__main__':
