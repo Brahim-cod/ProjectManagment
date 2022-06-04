@@ -33,6 +33,8 @@ def userProfile():
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute('SELECT * FROM emp WHERE emp_id = %s', (session['emp_id'],))
     account = cursor.fetchone()
+
+    cursor.execute('SELECT * FROM emp WHERE emp_id = %s', (session['emp_id'],))
     return render_template('user-profile.html', title = "User Profile", data = account)
 
 
