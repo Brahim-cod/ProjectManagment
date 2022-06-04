@@ -28,7 +28,12 @@ def home():
 
 @app.route('/userProfile')
 def userProfile():
-    return render_template('user-profile.html', title = "User Profile")
+    if not 'loggedin' in session:
+        return redirect(url_for('Login'))
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('SELECT * FROM emp WHERE emp_id = %s', (session['emp_id'],))
+    account = cursor.fetchone()
+    return render_template('user-profile.html', title = "User Profile", data = account)
 
 
 @app.route('/register', methods=['GET', 'POST'])

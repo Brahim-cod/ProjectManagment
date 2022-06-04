@@ -460,8 +460,8 @@
                                     <div class="pulse-css"></div>
                                 </div>
                                 <div class="pro-user mt-40">
-                                    <h5 class="pro-user-username text-dark mb-1 fs-15">Helena Zahangir</h5>
-                                    <h6 class="pro-user-desc text-muted fs-14">helena.rzahan@mail.com</h6>
+                                    <h5 class="pro-user-username text-dark mb-1 fs-15">{{data['fullName']}}</h5>
+                                    <h6 class="pro-user-desc text-muted fs-14">{{data['email']}}</h6>
                                     <div class="star-ratings start-ratings-main mb-10 clearfix">
                                         <div class="stars stars-example-fontawesome star-sm">
                                             <div class="br-wrapper br-theme-fontawesome-stars">
@@ -529,32 +529,27 @@
                                         <tr>
                                             <td class="py-2 px-0"> <span class="w-50">Employee ID</span> </td>
                                             <td>:</td>
-                                            <td class="py-2 px-0"> <span class="">#365900</span> </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="py-2 px-0"> <span class="w-50">Designation</span> </td>
-                                            <td>:</td>
-                                            <td class="py-2 px-0"> <span class="">Sr. Designer</span> </td>
+                                            <td class="py-2 px-0"> <span class="">#{{data.emp_id}}</span> </td>
                                         </tr>
                                         <tr>
                                             <td class="py-2 px-0"> <span class="w-50">Department</span> </td>
                                             <td>:</td>
-                                            <td class="py-2 px-0"> <span class="">Development</span> </td>
+                                            <td class="py-2 px-0"> <span class="">{{data.role_emp}}</span> </td>
                                         </tr>
                                         <tr>
                                             <td class="py-2 px-0"> <span class="w-50">Join Date</span> </td>
                                             <td>:</td>
-                                            <td class="py-2 px-0"> <span class="">25 - 12 - 2022</span> </td>
+                                            <td class="py-2 px-0"> <span class="">{{data.joinDate.strftime("%d - %m - %Y")}}</span> </td>
                                         </tr>
                                         <tr>
                                             <td class="py-2 px-0"> <span class="w-50">Phone Number</span> </td>
                                             <td>:</td>
-                                            <td class="py-2 px-0"> <span class="">+11 05986 2359 03</span> </td>
+                                            <td class="py-2 px-0"> <span class="">{{data.phone}}</span> </td>
                                         </tr>
                                         <tr>
                                             <td class="py-2 px-0"> <span class="w-50">Status</span> </td>
                                             <td>:</td>
-                                            <td class="py-2 px-0"> <span class="badge badge-success">Active</span> </td>
+                                            <td class="py-2 px-0"> <span class="badge badge-success">{{'Active' if data.status else 'Offline'}}</span> </td>
                                         </tr>
                                     </tbody>
                                 </table>
