@@ -3,8 +3,7 @@ from flask import Flask, flash, jsonify, redirect, render_template, request, ses
 from flask_mysqldb import MySQL
 import MySQLdb
 import re
-import math
-
+from flask_socketio import SocketIO
 
 app = Flask(__name__)
 app.secret_key = 'qOjLneE5QOa8AEF1GQGhQelVN3452Iwf'
@@ -16,7 +15,7 @@ app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'Ivws3135'
 app.config['MYSQL_DB'] = 'project'
 
-
+socketio = SocketIO(app)
 # Intialize MySQL
 mysql = MySQL(app)
 
@@ -28,58 +27,17 @@ def home():
     return render_template('index.html', title = "Dashboard")
 
 
-# @app.route('/userProfile', methods=['GET', 'POST'])
-# def userProfile():
-#     if not 'loggedin' in session:
-#         return redirect(url_for('Login'))
+@app.route('/chat')
+def sessions():
+    return render_template('message.html', title="Message")
 
-    
-#         # Check if account exists using MySQL
+def messageReceived(methods=['GET', 'POST']):
+    print('message was received!!!')
 
-#     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-#     cursor.execute('SELECT * FROM emp WHERE emp_id = %s', (session['emp_id'],))
-#     account = cursor.fetchone()
-
-    
-#     cursor.execute('''SELECT tache_id, nomT, priority, dateD, dateF, etat, status, t.projet_id  
-#                     FROM tache t INNER JOIN projet p ON t.projet_id = p.projet_id
-#                     INNER JOIN equipe e ON p.equipe_id = e.equipe_id
-#                     INNER JOIN emp_equipe ee ON e.equipe_id = ee.equipe_id
-#                     WHERE ee.emp_id = %s''', (session['emp_id'],))
-
-#     task = cursor.fetchall()
-
-    
-#     cursor.execute('''SELECT COUNT(status) as task FROM tache t INNER JOIN projet p ON t.projet_id = p.projet_id
-#                     INNER JOIN equipe e ON p.equipe_id = e.equipe_id
-#                     INNER JOIN emp_equipe ee ON e.equipe_id = ee.equipe_id
-#                     WHERE ee.emp_id = %s''', (session['emp_id'],))
-#     totalTasks = cursor.fetchone()
-
-    
-#     cursor.execute('''SELECT COUNT(status) as task FROM tache t INNER JOIN projet p ON t.projet_id = p.projet_id
-#                     INNER JOIN equipe e ON p.equipe_id = e.equipe_id
-#                     INNER JOIN emp_equipe ee ON e.equipe_id = ee.equipe_id
-#                     WHERE ee.emp_id = %s and status = 'On Hold' ''', (session['emp_id'],))
-#     hold = cursor.fetchone()
-
-    
-#     cursor.execute('''SELECT COUNT(status) as task FROM tache t INNER JOIN projet p ON t.projet_id = p.projet_id
-#                     INNER JOIN equipe e ON p.equipe_id = e.equipe_id
-#                     INNER JOIN emp_equipe ee ON e.equipe_id = ee.equipe_id
-#                     WHERE ee.emp_id = %s and status = 'Dealy' ''', (session['emp_id'],))
-#     run = cursor.fetchone()
-
-    
-#     cursor.execute('''SELECT COUNT(status) as task FROM tache t INNER JOIN projet p ON t.projet_id = p.projet_id
-#                     INNER JOIN equipe e ON p.equipe_id = e.equipe_id
-#                     INNER JOIN emp_equipe ee ON e.equipe_id = ee.equipe_id
-#                     WHERE ee.emp_id = %s and status = 'Completed' ''', (session['emp_id'],))
-#     finished = cursor.fetchone()
-
-#     counter = math.ceil(totalTasks["task"]/10)
-#     return render_template('user-profile.html', title = "User Profile", data = account, taskData = task, totalTasks = totalTasks , running = run, hold = hold, finished = finished, counter = counter)
-
+@socketio.on('my event')
+def handle_my_custom_event(json, methods=['GET', 'POST']):
+    print('received my event: ' + str(json))
+    socketio.emit('my response', json, callback=messageReceived)
 
 @app.route('/task/update/<int:id>', methods=['GET', 'POST'])
 def taskUpdate(id):
@@ -437,4 +395,4 @@ def page_not_found(error):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    socketio.run(app, debug=True)

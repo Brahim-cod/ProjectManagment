@@ -4159,6 +4159,16 @@ input.custom-control-input {
     top: 40px;
     border: 2px solid #fff;
 }
+.pulse-css-2 {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    position: absolute;
+    background: #d35e5e;
+    right: 0;
+    top: 40px;
+    border: 2px solid #fff;
+}
 
 .form-chat {
     background-color: var(--bg-card);
