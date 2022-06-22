@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        Protend - Project Management Admin Dashboard HTML Template
-    </title>
+    <title>Protend - Project Management Admin Dashboard HTML Template</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.png')}}" type="image/png">
     <!-- GOOGLE FONT -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    
+    
 
+    
     <!-- BOXICONS -->
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/icons.min.css')}}">
@@ -26,17 +26,37 @@
      <link rel="stylesheet" href="{{ url_for('static', filename='css/grid.css')}}">
      <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
      <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css')}}">
+
+     
+     
+     <script type="text/javascript">
+
+ 
+         $(document).ready(function () {
+             $('#task-profile').DataTable();
+         });
+     </script>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#example').DataTable();
+        });
+
+        $(document).ready(function () {
+            $('#task-profile').DataTable();
+        });
+    </script>
 </head>
-
-<body class="sidebar-expand">
-
+<body  class="sidebar-expand">
     <!-- SIDEBAR -->
     {% include 'components/sidebar.html' %}
        <!-- Main Header -->
     {% include 'components/mainheader.html' %}
         <!-- End Main Header -->
-
-    <!-- MAIN CONTENT -->
     <div class="main">
         <div class="main-content user">
             <div class="row">
@@ -49,7 +69,7 @@
                             <div class="content">
                                 <h5 class="title-box fs-15 mt-2">Total Task</h5>
                                 <div class="themesflat-counter fs-14 font-wb color-1">
-                                    <span class="number" data-from="0" data-to="1225" data-speed="2500" data-inviewport="yes">1225</span>
+                                    <span class="number" data-from="0" data-to="1225" data-speed="2500" data-inviewport="yes">{{totalTasks.task}}</span>
                                 </div>
                             </div>
                         </div>
@@ -60,7 +80,7 @@
                             <div class="content click-c">
                                 <h5 class="title-box fs-15 mt-2">Running Task</h5>
                                 <div class="themesflat-counter fs-14 font-wb color-2">
-                                    <span class="number" data-from="0" data-to="309" data-speed="2500" data-inviewport="yes">154 +</span>
+                                    <span class="number" data-from="0" data-to="309" data-speed="2500" data-inviewport="yes">{{running.task}} +</span>
                                 </div>
                             </div>
 
@@ -72,7 +92,7 @@
                             <div class="content click-c">
                                 <h5 class="title-box fs-15 mt-2">On Hold Task</h5>
                                 <div class="themesflat-counter fs-14 font-wb color-3">
-                                    <span class="number" data-from="0" data-to="309" data-speed="2500" data-inviewport="yes">75 +</span>
+                                    <span class="number" data-from="0" data-to="309" data-speed="2500" data-inviewport="yes">{{hold.task}} +</span>
                                 </div>
                             </div>
 
@@ -84,15 +104,16 @@
                             <div class="content click-c">
                                 <h5 class="title-box fs-15 mt-2">Complete Task</h5>
                                 <div class="themesflat-counter fs-14 font-wb color-4">
-                                    <span class="number" data-from="0" data-to="309" data-speed="2500" data-inviewport="yes">120 +</span>
+                                    <span class="number" data-from="0" data-to="309" data-speed="2500" data-inviewport="yes">{{finished.task}} +</span>
                                 </div>
                             </div>
 
                         </div>
                     </div>
+                    <!-- taskstable -->
                     <div class="box">
                         <div class="box-body pb-30">
-                            <div class="row">
+                            <!-- <form class="row" method="get">
                                 <div class="col-md-12 col-xl-10 mb-0">
                                     <div class="row">
                                         <div class="col-md-12 col-xl-4 mb-0">
@@ -125,7 +146,7 @@
                                 <div class="col-md-12 col-xl-2 mb-0">
                                     <div class="form-group mt-32"> <a href="#" class="btn bg-primary btn-block color-white">Search</a> </div>
                                 </div>
-                            </div>
+                            </form> -->
                         </div>
                         <div class="box-body">
                             <div class="table-responsive">
@@ -139,6 +160,15 @@
                                         </div>
                                     </div> -->
                                     <div class="row">
+                                        {% with messages = get_flashed_messages(with_categories=true) %}
+                                            {% if messages %}
+                                                <div class="alert alert-{{ messages.0.0 }} " role="alert">
+                                                {% for category, message in messages %}
+                                                    <span class="{{'badge-danger-light' if category == 'deleted' else 'badge-success-light'}}"> {{ message }} </span> 
+                                                {% endfor %}
+                                                </div>
+                                            {% endif %}
+                                        {% endwith %}
                                         <div class="col-sm-12">
                                             <table class="table table-vcenter text-nowrap table-bordered dataTable no-footer" id="task-profile" role="grid">
                                                 <thead>
@@ -154,298 +184,157 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr class="odd">
-                                                        <td class="text-center">1</td>
-                                                        <td>
-                                                            <a href="#" class="d-flex "> <span>Design Updated</span> </a>
-                                                        </td>
-                                                        <td><span class="badge badge-danger-light">High</span></td>
-                                                        <td>12-02-2021</td>
-                                                        <td>16-06-2021</td>
-                                                        <td>
-                                                            <div class="progress progress-sm">
-                                                                <div class="progress-bar bg-primary w-30"></div>
-                                                            </div>
-                                                        </td>
-                                                        <td><span class="badge badge-warning">On hold</span></td>
-                                                        <td>
-                                                            <div class="dropdown">
-                                                                <a href="javascript:void(0);" class="btn-link" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                    <i class='bx bx-dots-horizontal-rounded'></i>
-                                                                </a>
-                                                                <div class="dropdown-menu dropdown-menu-right">
-                                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_client"><i class="bx bx-trash"></i> Delete</a>
-                                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_client"><i class="bx bx-edit mr-5"></i>Edit</a>
+                                                {% for item in taskData %}
+
+                                                    <div class="modal custom-modal fade" id="delete_task_{{item.tache_id}}" role="dialog">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div class="modal-content">
+                                                                <div class="modal-body">
+                                                                    <div class="form-header">
+                                                                        <h3>Delete Task</h3>
+                                                                        <p>Are you sure want to delete task number {{item.tache_id}}?</p>
+                                                                    </div>
+                                                                    <div class="modal-btn delete-action">
+                                                                        <div class="row">
+                                                                            <div class="col-6 mb-0">
+                                                                                <a href="/task/delete/{{item.tache_id}}" class="btn btn-primary continue-btn">Delete</a>
+                                                                            </div>
+                                                                            <div class="col-6 mb-0">
+                                                                                <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-primary cancel-btn">Cancel</a>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </td>
-                                                    </tr>
+                                                        </div>
+                                                    </div>
+
+                                                    <div id="edit_task_{{item.tache_id}}" class="modal custom-modal fade" role="dialog">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title">Edit Task</h4>
+                                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <form action="/task/update/{{item.tache_id}}" method="post" role="contentinfo">
+                                                                        <div class="form-group">
+                                                                            <label>Task Name</label>
+                                                                            <input type="text" class="form-control" name="taskName" value="{{item.nomT}}">
+                                                                        </div>
+                                                                        <div class="form-group"> 
+                                                                            <label class="form-label">Select Priority:</label> 
+                                                                            <select name="taskPriority" class="form-control custom-select select2 select2-hidden-accessible" data-placeholder="Select Priority" tabindex="-1" aria-hidden="true"
+                                                                                    data-select2-id="select2-data-16-akyu">
+                                                                                <option label="Select Priority" data-select2-id="select2-data-18-ezae"></option> 
+                                                                                <option value="High" {{'selected' if item.priority == 'High'}} >High</option> 
+                                                                                <option value="Medium" {{'selected' if item.priority == 'Medium'}}>Medium</option> 
+                                                                                <option value="Low" {{'selected' if item.priority == 'Low'}}>Low</option> 
+                                                                            </select>
+                                                                            <span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="select2-data-17-6y8j" style="width: 100%;">
+                                                                                <span class="selection">
+                                                                                    <span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-attendance-ws-container" aria-controls="select2-attendance-ws-container"><span class="select2-selection__rendered" id="select2-attendance-ws-container" role="textbox" aria-readonly="true" title="Select Priority"></span>
+                                                                                        <span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span>
+                                                                                    </span>
+                                                                                </span>
+                                                                                <span class="dropdown-wrapper" aria-hidden="true"></span>
+                                                                            </span>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label class="form-label">Start Date:</label>
+                                                                            <div class="input-group">
+                                                                                <div class="input-group-prepend">
+                                                                                    <div class="input-group-text"><i class='bx bx-calendar'></i></div>
+                                                                                </div>
+                                                                                <input class="form-control" name="dateStart" type="date" value="{{item.dateD}}"> 
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label class="form-label">Deadline:</label>
+                                                                            <div class="input-group">
+                                                                                <div class="input-group-prepend">
+                                                                                    <div class="input-group-text"><i class='bx bx-calendar'></i></div>
+                                                                                </div>
+                                                                                <input class="form-control" name="dateFinish" type="date" value="{{item.dateF}}"> 
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label class="form-label">Progress:</label>
+                                                                            <div class="input-group">
+                                                                                <input type="range" name="taskEtat" class="form-range" value="{{item.etat}}" min="0" max="100" oninput='this.nextElementSibling.value = this.value + "%"'>
+                                                                                <output class="ml-5">{{item.etat}}%</output>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group"> 
+                                                                            <label class="form-label">Select Work Status:</label> 
+                                                                            <select name="taskStatus" class="form-control custom-select select2 select2-hidden-accessible" data-placeholder="Select Priority" tabindex="-1" aria-hidden="true"
+                                                                                    data-select2-id="select2-data-16-akyu">
+                                                                                <option label="Select Work Status" data-select2-id="select2-data-18-ezae"></option> 
+                                                                                <option value="Dealy"  {{'selected' if item.status == 'Dealy'}}>Dealy</option> 
+                                                                                <option value="On hold"  {{'selected' if item.status == 'On hold'}}>On hold</option> 
+                                                                                <option value="Completed"  {{'selected' if item.status == 'Completed'}}>Completed</option> 
+                                                                            </select>
+                                                                        <span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="select2-data-17-6y8j" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-attendance-ws-container" aria-controls="select2-attendance-ws-container"><span class="select2-selection__rendered" id="select2-attendance-ws-container" role="textbox" aria-readonly="true" title="Select Priority"></span>
+                                                                        <span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span>
+                                                                        </span>
+                                                                        </span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                                                                        </div>
+                                                                        <div class="submit-section text-center">
+                                                                            <button class="btn btn-primary submit-btn" type="submit">Submit</button>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                     <tr class="even">
-                                                        <td class="text-center">2</td>
+                                                        <td class="text-center">{{item.tache_id}}</td>
                                                         <td>
-                                                            <a href="#" class="d-flex "> <span>Website Develop</span> </a>
+                                                            <a href="/project-details/{{item.projet_id}}" class="d-flex "> <span>{{item.nomT}}</span> </a>
                                                         </td>
-                                                        <td><span class="badge badge-success-light">Low</span></td>
-                                                        <td>01-01-2021</td>
-                                                        <td>22-04-2021</td>
+                                                        <td><span class="badge {{'badge-danger-light' if item.priority == 'High' else 'badge-success-light' if item.priority == 'Low' else  'badge-warning-light'}}">{{item.priority}}</span></td>
+                                                        <td>{{item.dateD.strftime("%d-%m-%Y")}}</td>
+                                                        <td>{{item.dateF.strftime("%d-%m-%Y")}}</td>
                                                         <td>
                                                             <div class="progress progress-sm">
-                                                                <div class="progress-bar bg-yellow w-50"></div>
+                                                                <div class="progress-bar bg-primary w-{{item.etat if item.etat%10 == 0 else item.etat - item.etat%10 + 10}}"></div>
                                                             </div>
                                                         </td>
-                                                        <td>
-                                                            <div class="d-flex"> <span class="badge badge-danger">Dealy</span>
-                                                                <div class="mt-1 ms-1"> <span class="feather feather-info text-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Dealy by 99 days"></span> </div>
-                                                            </div>
-                                                        </td>
+                                                        <td><span class="badge {{'badge-danger-light' if item.status == 'Dealy' else 'badge-success-light' if item.status == 'Completed' else  'badge-warning-light'}}">{{item.status}}</span></td>
                                                         <td>
                                                             <div class="dropdown">
                                                                 <a href="javascript:void(0);" class="btn-link" data-bs-toggle="dropdown" aria-expanded="false">
                                                                     <i class='bx bx-dots-horizontal-rounded'></i>
                                                                 </a>
                                                                 <div class="dropdown-menu dropdown-menu-right">
-                                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_client"><i class="bx bx-trash"></i> Delete</a>
-                                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_client"><i class="bx bx-edit mr-5"></i>Edit</a>
+                                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_task_{{item.tache_id}}"><i class="bx bx-trash"></i> Delete</a>
+                                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_task_{{item.tache_id}}"><i class="bx bx-edit mr-5"></i>Edit</a>
                                                                 </div>
                                                             </div>
                                                         </td>
                                                     </tr>
-                                                    <tr class="odd">
-                                                        <td class="text-center">3</td>
-                                                        <td>
-                                                            <a href="#" class="d-flex "><span>Digital Marketing</span> </a>
-                                                        </td>
-                                                        <td><span class="badge badge-warning-light">Medium</span></td>
-                                                        <td>11-04-2021</td>
-                                                        <td>16-06-2021</td>
-                                                        <td>
-                                                            <div class="progress progress-sm">
-                                                                <div class="progress-bar bg-primary w-100"></div>
-                                                            </div>
-                                                        </td>
-                                                        <td> <span class="badge badge-success">Completed</span> </td>
-                                                        <td>
-                                                            <div class="dropdown">
-                                                                <a href="javascript:void(0);" class="btn-link" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                    <i class='bx bx-dots-horizontal-rounded'></i>
-                                                                </a>
-                                                                <div class="dropdown-menu dropdown-menu-right">
-                                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_client"><i class="bx bx-trash"></i> Delete</a>
-                                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_client"><i class="bx bx-edit mr-5"></i>Edit</a>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="even">
-                                                        <td class="text-center">4</td>
-                                                        <td>
-                                                            <a href="#" class="d-flex "><span>Ad Analysis</span> </a>
-                                                        </td>
-                                                        <td><span class="badge badge-danger-light">High</span></td>
-                                                        <td>11-03-2021</td>
-                                                        <td>19-05-2021</td>
-                                                        <td>
-                                                            <div class="progress progress-sm">
-                                                                <div class="progress-bar bg-primary w-80"></div>
-                                                            </div>
-                                                        </td>
-                                                        <td> <span class="badge badge-success">Completed</span> </td>
-                                                        <td>
-                                                            <div class="dropdown">
-                                                                <a href="javascript:void(0);" class="btn-link" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                    <i class='bx bx-dots-horizontal-rounded'></i>
-                                                                </a>
-                                                                <div class="dropdown-menu dropdown-menu-right">
-                                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_client"><i class="bx bx-trash"></i> Delete</a>
-                                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_client"><i class="bx bx-edit mr-5"></i>Edit</a>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="odd">
-                                                        <td class="text-center">5</td>
-                                                        <td>
-                                                            <a href="#" class="d-flex "><span>Design update</span> </a>
-                                                        </td>
-                                                        <td><span class="badge badge-danger-light">High</span></td>
-                                                        <td>05-02-2021</td>
-                                                        <td>21-04-2021</td>
-                                                        <td>
-                                                            <div class="progress progress-sm">
-                                                                <div class="progress-bar bg-primary w-70"></div>
-                                                            </div>
-                                                        </td>
-                                                        <td> <span class="badge badge-success">Completed</span> </td>
-                                                        <td>
-                                                            <div class="dropdown">
-                                                                <a href="javascript:void(0);" class="btn-link" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                    <i class='bx bx-dots-horizontal-rounded'></i>
-                                                                </a>
-                                                                <div class="dropdown-menu dropdown-menu-right">
-                                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_client"><i class="bx bx-trash"></i> Delete</a>
-                                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_client"><i class="bx bx-edit mr-5"></i>Edit</a>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="even">
-                                                        <td class="text-center">6</td>
-                                                        <td>
-                                                            <a href="#" class="d-flex "><span>Design update</span> </a>
-                                                        </td>
-                                                        <td><span class="badge badge-danger-light">High</span></td>
-                                                        <td>21-01-2021</td>
-                                                        <td>15-03-2021</td>
-                                                        <td>
-                                                            <div class="progress progress-sm">
-                                                                <div class="progress-bar bg-primary w-40"></div>
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="d-flex"> <span class="badge badge-success">Completed</span>
-                                                                <div class="mt-1 ms-1"> <span class="feather feather-info text-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Dealy by 30 days"></span> </div>
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="dropdown">
-                                                                <a href="javascript:void(0);" class="btn-link" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                    <i class='bx bx-dots-horizontal-rounded'></i>
-                                                                </a>
-                                                                <div class="dropdown-menu dropdown-menu-right">
-                                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_client"><i class="bx bx-trash"></i> Delete</a>
-                                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_client"><i class="bx bx-edit mr-5"></i>Edit</a>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="odd">
-                                                        <td class="text-center">7</td>
-                                                        <td>
-                                                            <a href="#" class="d-flex "><span>Design update</span> </a>
-                                                        </td>
-                                                        <td><span class="badge badge-danger-light">High</span></td>
-                                                        <td>23-01-2021</td>
-                                                        <td>25-02-2021</td>
-                                                        <td>
-                                                            <div class="progress progress-sm">
-                                                                <div class="progress-bar bg-yellow w-40"></div>
-                                                            </div>
-                                                        </td>
-                                                        <td> <span class="badge badge-success">Completed</span> </td>
-                                                        <td>
-                                                            <div class="dropdown">
-                                                                <a href="javascript:void(0);" class="btn-link" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                    <i class='bx bx-dots-horizontal-rounded'></i>
-                                                                </a>
-                                                                <div class="dropdown-menu dropdown-menu-right">
-                                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_client"><i class="bx bx-trash"></i> Delete</a>
-                                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_client"><i class="bx bx-edit mr-5"></i>Edit</a>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="even">
-                                                        <td class="text-center">8</td>
-                                                        <td>
-                                                            <a href="#" class="d-flex "><span>Design update</span> </a>
-                                                        </td>
-                                                        <td><span class="badge badge-danger-light">High</span></td>
-                                                        <td>13-03-2021</td>
-                                                        <td>05-05-2021</td>
-                                                        <td>
-                                                            <div class="progress progress-sm">
-                                                                <div class="progress-bar bg-primary w-100"></div>
-                                                            </div>
-                                                        </td>
-                                                        <td> <span class="badge badge-warning">On Hold</span> </td>
-                                                        <td>
-                                                            <div class="dropdown">
-                                                                <a href="javascript:void(0);" class="btn-link" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                    <i class='bx bx-dots-horizontal-rounded'></i>
-                                                                </a>
-                                                                <div class="dropdown-menu dropdown-menu-right">
-                                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_client"><i class="bx bx-trash"></i> Delete</a>
-                                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_client"><i class="bx bx-edit mr-5"></i>Edit</a>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="even">
-                                                        <td class="text-center">9</td>
-                                                        <td>
-                                                            <a href="#" class="d-flex "> <span>Design update</span> </a>
-                                                        </td>
-                                                        <td><span class="badge badge-success-light">Low</span></td>
-                                                        <td>01-01-2021</td>
-                                                        <td>22-04-2021</td>
-                                                        <td>
-                                                            <div class="progress progress-sm">
-                                                                <div class="progress-bar bg-yellow w-50"></div>
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="d-flex"> <span class="badge badge-danger">Dealy</span>
-                                                                <div class="mt-1 ms-1"> <span class="feather feather-info text-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Dealy by 99 days"></span> </div>
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="dropdown">
-                                                                <a href="javascript:void(0);" class="btn-link" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                    <i class='bx bx-dots-horizontal-rounded'></i>
-                                                                </a>
-                                                                <div class="dropdown-menu dropdown-menu-right">
-                                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_client"><i class="bx bx-trash"></i> Delete</a>
-                                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_client"><i class="bx bx-edit mr-5"></i>Edit</a>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="odd">
-                                                        <td class="text-center">10</td>
-                                                        <td>
-                                                            <a href="#" class="d-flex "><span>Design update</span> </a>
-                                                        </td>
-                                                        <td><span class="badge badge-warning-light">Medium</span></td>
-                                                        <td>11-04-2021</td>
-                                                        <td>16-06-2021</td>
-                                                        <td>
-                                                            <div class="progress progress-sm">
-                                                                <div class="progress-bar bg-primary w-100"></div>
-                                                            </div>
-                                                        </td>
-                                                        <td> <span class="badge badge-success">Completed</span> </td>
-                                                        <td>
-                                                            <div class="dropdown">
-                                                                <a href="javascript:void(0);" class="btn-link" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                    <i class='bx bx-dots-horizontal-rounded'></i>
-                                                                </a>
-                                                                <div class="dropdown-menu dropdown-menu-right">
-                                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_client"><i class="bx bx-trash"></i> Delete</a>
-                                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_client"><i class="bx bx-edit mr-5"></i>Edit</a>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
+                                                {% endfor %}
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <!-- <div class="row">
                                         <div class="col-sm-12 col-md-5">
                                             <div class="dataTables_info" id="task-profile_info" role="status" aria-live="polite">Showing 1 to 8 of 8 entries</div>
                                         </div>
-                                        <div class="col-sm-12 col-md-7">
+                                        <div class="col-sm-12 col-md-7" method="post" action="/api/tasktable">
                                             <div class="dataTables_paginate paging_simple_numbers" id="task-profile_paginate">
                                                 <ul class="pagination">
-                                                    <li class="paginate_button page-item previous disabled" id="task-profile_previous"><a href="#" aria-controls="task-profile" data-dt-idx="0" tabindex="0" class="page-link">Previous</a></li>
-                                                    <li class="paginate_button page-item "><a href="#" aria-controls="task-profile" data-dt-idx="1" tabindex="0" class="page-link">01</a></li>
-                                                    <li class="paginate_button page-item active"><a href="#" aria-controls="task-profile" data-dt-idx="1" tabindex="0" class="page-link">02</a></li>
+                                                    <li class="paginate_button page-item previous disabled" id="task-profile_previous"><a href="#" aria-controls="task-profile" data-dt-idx="0" tabindex="0" class="page-link" role="button">Previous</a></li>
+                                                    <li class="paginate_button page-item active"><a href="#" aria-controls="task-profile" data-dt-idx="1" tabindex="0" class="page-link">01</a></li>
+                                                    <li class="paginate_button page-item "><a href="#" aria-controls="task-profile" data-dt-idx="1" tabindex="0" class="page-link">02</a></li>
                                                     <li class="paginate_button page-item "><a href="#" aria-controls="task-profile" data-dt-idx="1" tabindex="0" class="page-link">03</a></li>
-                                                    <li class="paginate_button page-item next disabled" id="task-profile_next"><a href="#" aria-controls="task-profile" data-dt-idx="2" tabindex="0" class="page-link">Next</a></li>
+                                                    <li class="paginate_button page-item next disabled" id="task-profile_next"><a href="#" aria-controls="task-profile" data-dt-idx="2" tabindex="0" class="page-link" role="button">Next</a></li>
                                                 </ul>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
@@ -456,16 +345,16 @@
                         <div class="box-body">
                             <div class="user-pic text-center">
                                 <div class="avatar ">
-                                    <img src="./images/profile/user-profile.png" alt="">
+                                    <img src="{{url_for('static', filename='images/profile/user-profile.png')}}" alt="">
                                     <div class="pulse-css"></div>
                                 </div>
                                 <div class="pro-user mt-40">
-                                    <h5 class="pro-user-username text-dark mb-1 fs-15">Helena Zahangir</h5>
-                                    <h6 class="pro-user-desc text-muted fs-14">helena.rzahan@mail.com</h6>
+                                    <h5 class="pro-user-username text-dark mb-1 fs-15">{{data['fullName']}}</h5>
+                                    <h6 class="pro-user-desc text-muted fs-14">{{data['email']}}</h6>
                                     <div class="star-ratings start-ratings-main mb-10 clearfix">
                                         <div class="stars stars-example-fontawesome star-sm">
                                             <div class="br-wrapper br-theme-fontawesome-stars">
-                                                <select id="example-fontawesome" name="rating" style="display: none;"><option value="1">1</option> <option value="2">2</option> <option value="3">3</option> <option value="4" selected="">4</option> <option value="5">5</option> </select>
+                                                <select id="example-fontawesome" name="rating" style="display: none;"><option value="1">1</option> <option value="2">2</option> <option value="3">3</option> <option value="4" >4</option> <option value="5" selected="">5</option> </select>
                                                 <!-- <div class="br-widget">
                                                     <a href="#" data-rating-value="1" data-rating-text="1" class="br-selected"></a>
                                                     <a href="#" data-rating-value="2" data-rating-text="2" class="br-selected"></a>
@@ -529,32 +418,27 @@
                                         <tr>
                                             <td class="py-2 px-0"> <span class="w-50">Employee ID</span> </td>
                                             <td>:</td>
-                                            <td class="py-2 px-0"> <span class="">#365900</span> </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="py-2 px-0"> <span class="w-50">Designation</span> </td>
-                                            <td>:</td>
-                                            <td class="py-2 px-0"> <span class="">Sr. Designer</span> </td>
+                                            <td class="py-2 px-0"> <span class="">#{{data.emp_id}}</span> </td>
                                         </tr>
                                         <tr>
                                             <td class="py-2 px-0"> <span class="w-50">Department</span> </td>
                                             <td>:</td>
-                                            <td class="py-2 px-0"> <span class="">Development</span> </td>
+                                            <td class="py-2 px-0"> <span class="">{{data.role_emp}}</span> </td>
                                         </tr>
                                         <tr>
                                             <td class="py-2 px-0"> <span class="w-50">Join Date</span> </td>
                                             <td>:</td>
-                                            <td class="py-2 px-0"> <span class="">25 - 12 - 2022</span> </td>
+                                            <td class="py-2 px-0"> <span class="">{{data.joinDate.strftime("%d - %m - %Y")}}</span> </td>
                                         </tr>
                                         <tr>
                                             <td class="py-2 px-0"> <span class="w-50">Phone Number</span> </td>
                                             <td>:</td>
-                                            <td class="py-2 px-0"> <span class="">+11 05986 2359 03</span> </td>
+                                            <td class="py-2 px-0"> <span class="">{{data.phone}}</span> </td>
                                         </tr>
                                         <tr>
                                             <td class="py-2 px-0"> <span class="w-50">Status</span> </td>
                                             <td>:</td>
-                                            <td class="py-2 px-0"> <span class="badge badge-success">Active</span> </td>
+                                            <td class="py-2 px-0"> <span class="badge {{'badge-success' if data.status else 'badge-danger'}}">{{'Active' if data.status else 'Offline'}}</span> </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -589,44 +473,42 @@
 
                         </div>
                     </div>
-                </div>
+                </div>  
             </div>
 
 
         </div>
     </div>
     <!-- END MAIN CONTENT -->
-
     <div class="overlay"></div>
 
-    <!-- SCRIPT -->
-    <!-- APEX CHART -->
 
-    <script src="{{ url_for('static', filename='libs/jquery/jquery.min.js')}}"></script>
-    <script src="{{ url_for('static', filename='libs/jquery/jquery-ui.min.js')}}"></script>
-    <script src="{{ url_for('static', filename='libs/moment/min/moment.min.js')}}"></script>
-    <script src="{{ url_for('static', filename='libs/apexcharts/apexcharts.js')}}"></script>
-    <script src="{{ url_for('static', filename='libs/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
-    <script src="{{ url_for('static', filename='libs/peity/jquery.peity.min.js')}}"></script>
-    <script src="{{ url_for('static', filename='libs/chart.js/Chart.bundle.min.js')}}"></script>
-    <script src="{{ url_for('static', filename='libs/owl.carousel/owl.carousel.min.js')}}"></script>
-    <script src="{{ url_for('static', filename='libs/bootstrap/js/bootstrap.min.js')}}"></script>
-    <script src="{{ url_for('static', filename='libs/bootstrap-datepicker/js/bootstrap-datetimepicker.min.js')}}"></script>
-    <script src="{{ url_for('static', filename='js/countto.js')}}"></script>
-    <script src="{{ url_for('static', filename='libs/date-picker/datepicker.js')}}"></script>
-    <script src="{{ url_for('static', filename='libs/rating/js/custom-ratings.js')}}"></script>
-    <script src="{{ url_for('static', filename='libs/rating/js/jquery.barrating.js')}}"></script>
-    <script src="{{ url_for('static', filename='libs/circle-progress/circle-progress.min.js')}}"></script>
-    <script src="{{ url_for('static', filename='libs/simplebar/simplebar.min.js')}}"></script>
+<script src="{{ url_for('static', filename='libs/jquery/jquery-ui.min.js')}}"></script>
+<script src="{{ url_for('static', filename='libs/moment/min/moment.min.js')}}"></script>
+<script src="{{ url_for('static', filename='libs/apexcharts/apexcharts.js')}}"></script>
+<script src="{{ url_for('static', filename='libs/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+<script src="{{ url_for('static', filename='libs/peity/jquery.peity.min.js')}}"></script>
+<script src="{{ url_for('static', filename='libs/chart.js/Chart.bundle.min.js')}}"></script>
+<script src="{{ url_for('static', filename='libs/owl.carousel/owl.carousel.min.js')}}"></script>
+<script src="{{ url_for('static', filename='libs/bootstrap/js/bootstrap.min.js')}}"></script>
+<script src="{{ url_for('static', filename='libs/bootstrap-datepicker/js/bootstrap-datetimepicker.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/countto.js')}}"></script>
+<script src="{{ url_for('static', filename='libs/date-picker/datepicker.js')}}"></script>
+<script src="{{ url_for('static', filename='libs/rating/js/custom-ratings.js')}}"></script>
+<script src="{{ url_for('static', filename='libs/rating/js/jquery.barrating.js')}}"></script>
+<script src="{{ url_for('static', filename='libs/circle-progress/circle-progress.min.js')}}"></script>
+<script src="{{ url_for('static', filename='libs/simplebar/simplebar.min.js')}}"></script>
 
 
-    <!-- APP JS -->
-    <script src="{{ url_for('static', filename='js/main.js')}}"></script>
-    <script src="{{ url_for('static', filename='js/shortcode.js')}}"></script>
-    <script src="{{ url_for('static', filename='js/pages/datepicker.js')}}"></script>
-    <script src="{{ url_for('static', filename='js/pages/chart-circle.js')}}"></script>
 
 
+
+
+
+<!-- APP JS -->
+<script src="{{ url_for('static', filename='js/main.js')}}"></script>
+<script src="{{ url_for('static', filename='js/shortcode.js')}}"></script>
+<script src="{{ url_for('static', filename='js/pages/datepicker.js')}}"></script>
+<script src="{{ url_for('static', filename='js/pages/chart-circle.js')}}"></script>
 </body>
-
 </html>

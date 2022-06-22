@@ -1,0 +1,229 @@
+
+<div class="box">
+    <div class="box-body pb-30">
+        <form class="row" method="get">
+            <div class="col-md-12 col-xl-10 mb-0">
+                <div class="row">
+                    <div class="col-md-12 col-xl-4 mb-0">
+                        <div class="form-group"> <label class="form-label">From:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text"><i class='bx bx-calendar'></i> </div>
+                                </div><input class="form-control fc-datepicker" placeholder="DD-MM-YYYY" type="text"> </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-xl-4 mb-0">
+                        <div class="form-group"> <label class="form-label">To:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text"><i class='bx bx-calendar'></i> </div>
+                                </div><input class="form-control fc-datepicker" placeholder="DD-MM-YYYY" type="text"> </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-xl-4 mb-0">
+                        <div class="form-group"> <label class="form-label">Select Priority:</label> <select name="attendance" class="form-control custom-select select2 select2-hidden-accessible" data-placeholder="Select Priority" tabindex="-1" aria-hidden="true"
+                                data-select2-id="select2-data-16-akyu"><option label="Select Priority" data-select2-id="select2-data-18-ezae"></option> <option value="1">High</option> <option value="2">Medium</option> <option value="3">Low</option> </select>
+                            <span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="select2-data-17-6y8j" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-attendance-ws-container" aria-controls="select2-attendance-ws-container"><span class="select2-selection__rendered" id="select2-attendance-ws-container" role="textbox" aria-readonly="true" title="Select Priority"></span>
+                            <span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span>
+                            </span>
+                            </span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 col-xl-2 mb-0">
+                <div class="form-group mt-32"> <a href="#" class="btn bg-primary btn-block color-white">Search</a> </div>
+            </div>
+        </form>
+    </div>
+    <div class="box-body">
+        <div class="table-responsive">
+            <div id="task-profile_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
+                <!-- <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        <div class="dataTables_length" id="task-profile_length"><label>Show <select name="task-profile_length" aria-controls="task-profile" class="form-select form-select-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label></div>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <div id="task-profile_filter" class="dataTables_filter"><label><input type="search" class="form-control form-control-sm" placeholder="Search..." aria-controls="task-profile"></label></div>
+                    </div>
+                </div> -->
+                <div class="row">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            <div class="alert alert-{{ messages.0.0 }} " role="alert">
+                            {% for category, message in messages %}
+                                <span class="{{'badge-danger-light' if category == 'deleted' else 'badge-success-light'}}"> {{ message }} </span> 
+                            {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+                    <div class="col-sm-12">
+                        <table class="table table-vcenter text-nowrap table-bordered dataTable no-footer" id="task-profile" role="grid">
+                            <thead>
+                                <tr class="top">
+                                    <th class="border-bottom-0 text-center sorting fs-14 font-w500" tabindex="0" aria-controls="task-profile" rowspan="1" colspan="1" style="width: 26.6562px;">No</th>
+                                    <th class="border-bottom-0 sorting fs-14 font-w500" tabindex="0" aria-controls="task-profile" rowspan="1" colspan="1" style="width: 222.312px;">Task</th>
+                                    <th class="border-bottom-0 sorting fs-14 font-w500" tabindex="0" aria-controls="task-profile" rowspan="1" colspan="1" style="width: 84.8281px;">Priority</th>
+                                    <th class="border-bottom-0 sorting fs-14 font-w500" tabindex="0" aria-controls="task-profile" rowspan="1" colspan="1" style="width: 87.9844px;">Start Date</th>
+                                    <th class="border-bottom-0 sorting fs-14 font-w500" tabindex="0" aria-controls="task-profile" rowspan="1" colspan="1" style="width: 87.9844px;">Deadline</th>
+                                    <th class="border-bottom-0 sorting fs-14 font-w500" tabindex="0" aria-controls="task-profile" rowspan="1" colspan="1" style="width: 71.875px;">Progress</th>
+                                    <th class="border-bottom-0 sorting fs-14 font-w500" tabindex="0" aria-controls="task-profile" rowspan="1" colspan="1" style="width: 110.719px;">Work Status</th>
+                                    <th class="border-bottom-0 sorting_disabled fs-14 font-w500" rowspan="1" colspan="1" style="width: 145.391px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for item in taskData %}
+
+                                <div class="modal custom-modal fade" id="delete_task_{{item.tache_id}}" role="dialog">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-body">
+                                                <div class="form-header">
+                                                    <h3>Delete Task</h3>
+                                                    <p>Are you sure want to delete task number {{item.tache_id}}?</p>
+                                                </div>
+                                                <div class="modal-btn delete-action">
+                                                    <div class="row">
+                                                        <div class="col-6 mb-0">
+                                                            <a href="/task/delete/{{item.tache_id}}" class="btn btn-primary continue-btn">Delete</a>
+                                                        </div>
+                                                        <div class="col-6 mb-0">
+                                                            <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-primary cancel-btn">Cancel</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="edit_task_{{item.tache_id}}" class="modal custom-modal fade" role="dialog">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Edit Task</h4>
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="/task/update/{{item.tache_id}}" method="post" role="contentinfo">
+                                                    <div class="form-group">
+                                                        <label>Task Name</label>
+                                                        <input type="text" class="form-control" name="taskName" value="{{item.nomT}}">
+                                                    </div>
+                                                    <div class="form-group"> 
+                                                        <label class="form-label">Select Priority:</label> 
+                                                        <select name="taskPriority" class="form-control custom-select select2 select2-hidden-accessible" data-placeholder="Select Priority" tabindex="-1" aria-hidden="true"
+                                                                data-select2-id="select2-data-16-akyu">
+                                                            <option label="Select Priority" data-select2-id="select2-data-18-ezae"></option> 
+                                                            <option value="High" {{'selected' if item.priority == 'High'}} >High</option> 
+                                                            <option value="Medium" {{'selected' if item.priority == 'Medium'}}>Medium</option> 
+                                                            <option value="Low" {{'selected' if item.priority == 'Low'}}>Low</option> 
+                                                        </select>
+                                                        <span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="select2-data-17-6y8j" style="width: 100%;">
+                                                            <span class="selection">
+                                                                <span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-attendance-ws-container" aria-controls="select2-attendance-ws-container"><span class="select2-selection__rendered" id="select2-attendance-ws-container" role="textbox" aria-readonly="true" title="Select Priority"></span>
+                                                                    <span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span>
+                                                                </span>
+                                                            </span>
+                                                            <span class="dropdown-wrapper" aria-hidden="true"></span>
+                                                        </span>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="form-label">Start Date:</label>
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend">
+                                                                <div class="input-group-text"><i class='bx bx-calendar'></i></div>
+                                                            </div>
+                                                            <input class="form-control" name="dateStart" type="date" value="{{item.dateD}}"> 
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="form-label">Deadline:</label>
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend">
+                                                                <div class="input-group-text"><i class='bx bx-calendar'></i></div>
+                                                            </div>
+                                                            <input class="form-control" name="dateFinish" type="date" value="{{item.dateF}}"> 
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="form-label">Progress:</label>
+                                                        <div class="input-group">
+                                                            <input type="range" name="taskEtat" class="form-range" value="{{item.etat}}" min="0" max="100" oninput='this.nextElementSibling.value = this.value + "%"'>
+                                                            <output class="ml-5">{{item.etat}}%</output>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group"> 
+                                                        <label class="form-label">Select Work Status:</label> 
+                                                        <select name="taskStatus" class="form-control custom-select select2 select2-hidden-accessible" data-placeholder="Select Priority" tabindex="-1" aria-hidden="true"
+                                                                data-select2-id="select2-data-16-akyu">
+                                                            <option label="Select Work Status" data-select2-id="select2-data-18-ezae"></option> 
+                                                            <option value="Dealy"  {{'selected' if item.status == 'Dealy'}}>Dealy</option> 
+                                                            <option value="On hold"  {{'selected' if item.status == 'On hold'}}>On hold</option> 
+                                                            <option value="Completed"  {{'selected' if item.status == 'Completed'}}>Completed</option> 
+                                                        </select>
+                                                    <span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="select2-data-17-6y8j" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-attendance-ws-container" aria-controls="select2-attendance-ws-container"><span class="select2-selection__rendered" id="select2-attendance-ws-container" role="textbox" aria-readonly="true" title="Select Priority"></span>
+                                                    <span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span>
+                                                    </span>
+                                                    </span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                                                    </div>
+                                                    <div class="submit-section text-center">
+                                                        <button class="btn btn-primary submit-btn" type="submit">Submit</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <tr class="even">
+                                    <td class="text-center">{{item.tache_id}}</td>
+                                    <td>
+                                        <a href="/project-details/{{item.projet_id}}" class="d-flex "> <span>{{item.nomT}}</span> </a>
+                                    </td>
+                                    <td><span class="badge {{'badge-danger-light' if item.priority == 'High' else 'badge-success-light' if item.priority == 'Low' else  'badge-warning-light'}}">{{item.priority}}</span></td>
+                                    <td>{{item.dateD.strftime("%d-%m-%Y")}}</td>
+                                    <td>{{item.dateF.strftime("%d-%m-%Y")}}</td>
+                                    <td>
+                                        <div class="progress progress-sm">
+                                            <div class="progress-bar bg-primary w-{{item.etat if item.etat%10 == 0 else item.etat - item.etat%10 + 10}}"></div>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge {{'badge-danger-light' if item.status == 'Dealy' else 'badge-success-light' if item.status == 'Completed' else  'badge-warning-light'}}">{{item.status}}</span></td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <a href="javascript:void(0);" class="btn-link" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class='bx bx-dots-horizontal-rounded'></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_task_{{item.tache_id}}"><i class="bx bx-trash"></i> Delete</a>
+                                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_task_{{item.tache_id}}"><i class="bx bx-edit mr-5"></i>Edit</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- <div class="row">
+                    <div class="col-sm-12 col-md-5">
+                        <div class="dataTables_info" id="task-profile_info" role="status" aria-live="polite">Showing 1 to 8 of 8 entries</div>
+                    </div>
+                    <div class="col-sm-12 col-md-7" method="post" action="/api/tasktable">
+                        <div class="dataTables_paginate paging_simple_numbers" id="task-profile_paginate">
+                            <ul class="pagination">
+                                <li class="paginate_button page-item previous disabled" id="task-profile_previous"><a href="#" aria-controls="task-profile" data-dt-idx="0" tabindex="0" class="page-link" role="button">Previous</a></li>
+                                <li class="paginate_button page-item active"><a href="#" aria-controls="task-profile" data-dt-idx="1" tabindex="0" class="page-link">01</a></li>
+                                <li class="paginate_button page-item "><a href="#" aria-controls="task-profile" data-dt-idx="1" tabindex="0" class="page-link">02</a></li>
+                                <li class="paginate_button page-item "><a href="#" aria-controls="task-profile" data-dt-idx="1" tabindex="0" class="page-link">03</a></li>
+                                <li class="paginate_button page-item next disabled" id="task-profile_next"><a href="#" aria-controls="task-profile" data-dt-idx="2" tabindex="0" class="page-link" role="button">Next</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,8 +1,9 @@
-from flask import Flask, jsonify, redirect, render_template, request, session, url_for
+from asyncio import tasks
+from flask import Flask, flash, jsonify, redirect, render_template, request, session, url_for
 from flask_mysqldb import MySQL
 import MySQLdb
 import re
-
+from flask_socketio import SocketIO
 
 app = Flask(__name__)
 app.secret_key = 'qOjLneE5QOa8AEF1GQGhQelVN3452Iwf'
@@ -14,7 +15,7 @@ app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'Ivws3135'
 app.config['MYSQL_DB'] = 'project'
 
-
+socketio = SocketIO(app)
 # Intialize MySQL
 mysql = MySQL(app)
 
@@ -26,10 +27,51 @@ def home():
     return render_template('index.html', title = "Dashboard")
 
 
-@app.route('/userProfile')
-def userProfile():
-    return render_template('user-profile.html', title = "User Profile")
+@app.route('/chat')
+def sessions():
+    return render_template('message.html', title="Message")
 
+def messageReceived(methods=['GET', 'POST']):
+    print('message was received!!!')
+
+@socketio.on('my event')
+def handle_my_custom_event(json, methods=['GET', 'POST']):
+    print('received my event: ' + str(json))
+    socketio.emit('my response', json, callback=messageReceived)
+
+@app.route('/task/update/<int:id>', methods=['GET', 'POST'])
+def taskUpdate(id):
+    if not 'loggedin' in session:
+        return redirect(url_for('Login'))
+    if request.method == 'POST' and 'taskName' in request.form and 'taskPriority' in request.form and 'dateStart' in request.form and 'dateFinish' in request.form and 'taskEtat' in request.form and 'taskStatus' in request.form:
+        # Create variables for easy access
+        name = request.form['taskName']
+        finish=request.form['dateFinish']
+        start = request.form['dateStart']
+        etat=request.form['taskEtat']
+        priority = request.form['taskPriority']
+        status=request.form['taskStatus']
+        if etat == '100':
+            status = 'Completed'
+
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('''UPDATE tache
+                        SET nomT = %s, dateF = %s, DateD = %s, etat = %s, priority = %s, status = %s
+                        WHERE tache_id = %s''', (name, finish, start, etat, priority, status, id, ))
+        mysql.connection.commit()
+        flash('You have successfully updated task!', "updated")
+        return redirect(url_for('userProfile'))
+    return redirect(url_for('home'))
+
+@app.route('/task/delete/<int:id>')
+def taskDelete(id):
+    if not 'loggedin' in session:
+        return redirect(url_for('Login'))
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('DELETE FROM tache WHERE tache_id = %s', (id,))
+    mysql.connection.commit()
+    flash('You have successfully deleted task!', "deleted")
+    return redirect(url_for('userProfile'))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -128,7 +170,74 @@ def projectdetails(id):
     return render_template('project-details.html', title = "Project Details", data = projet)
 
         
+
+@app.route('/userProfile')
+def userProfile():
+    if not 'loggedin' in session:
+        return redirect(url_for('Login'))
+
+    
+        # Check if account exists using MySQL
+
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('SELECT * FROM emp WHERE emp_id = %s', (session['emp_id'],))
+    account = cursor.fetchone()
+
+    
+    cursor.execute('''SELECT tache_id, nomT, priority, dateD, dateF, etat, status, t.projet_id  
+                    FROM tache t INNER JOIN projet p ON t.projet_id = p.projet_id
+                    INNER JOIN equipe e ON p.equipe_id = e.equipe_id
+                    INNER JOIN emp_equipe ee ON e.equipe_id = ee.equipe_id
+                    WHERE ee.emp_id = %s''', (session['emp_id'],))
+
+    task = cursor.fetchall()
+
+    
+    cursor.execute('''SELECT COUNT(status) as task FROM tache t INNER JOIN projet p ON t.projet_id = p.projet_id
+                    INNER JOIN equipe e ON p.equipe_id = e.equipe_id
+                    INNER JOIN emp_equipe ee ON e.equipe_id = ee.equipe_id
+                    WHERE ee.emp_id = %s''', (session['emp_id'],))
+    totalTasks = cursor.fetchone()
+
+    
+    cursor.execute('''SELECT COUNT(status) as task FROM tache t INNER JOIN projet p ON t.projet_id = p.projet_id
+                    INNER JOIN equipe e ON p.equipe_id = e.equipe_id
+                    INNER JOIN emp_equipe ee ON e.equipe_id = ee.equipe_id
+                    WHERE ee.emp_id = %s and status = 'On Hold' ''', (session['emp_id'],))
+    hold = cursor.fetchone()
+
+    
+    cursor.execute('''SELECT COUNT(status) as task FROM tache t INNER JOIN projet p ON t.projet_id = p.projet_id
+                    INNER JOIN equipe e ON p.equipe_id = e.equipe_id
+                    INNER JOIN emp_equipe ee ON e.equipe_id = ee.equipe_id
+                    WHERE ee.emp_id = %s and status = 'Dealy' ''', (session['emp_id'],))
+    run = cursor.fetchone()
+
+    
+    cursor.execute('''SELECT COUNT(status) as task FROM tache t INNER JOIN projet p ON t.projet_id = p.projet_id
+                    INNER JOIN equipe e ON p.equipe_id = e.equipe_id
+                    INNER JOIN emp_equipe ee ON e.equipe_id = ee.equipe_id
+                    WHERE ee.emp_id = %s and status = 'Completed' ''', (session['emp_id'],))
+    finished = cursor.fetchone()
+
+ 
+    return render_template('user-profile.html', data = account, taskData = task, totalTasks = totalTasks , running = run, hold = hold, finished = finished)
+
 # API
+
+# @app.route("/api/tasktable")
+# def tasktable():
+#     if not 'loggedin' in session:
+#         return redirect(url_for('Login'))
+#     # select = request.args.get('selected')
+#     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+#     cursor.execute('''SELECT tache_id, nomT, priority, dateD, dateF, etat, status, t.projet_id  
+#                     FROM tache t INNER JOIN projet p ON t.projet_id = p.projet_id
+#                     INNER JOIN equipe e ON p.equipe_id = e.equipe_id
+#                     INNER JOIN emp_equipe ee ON e.equipe_id = ee.equipe_id
+#                     WHERE ee.emp_id = %s''', (session['emp_id'],))
+
+#     task = cursor.fetchall()
 
 @app.route("/api/customer_chart")
 def customer_chart():
@@ -286,4 +395,4 @@ def page_not_found(error):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    socketio.run(app, debug=True)
