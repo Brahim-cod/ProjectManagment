@@ -9,7 +9,7 @@ app.secret_key = 'qOjLneE5QOa8AEF1GQGhQelVN3452Iwf'
 
 # Enter your database connection details below
 app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_PORT'] = 3307
+# app.config['MYSQL_PORT'] = 3307
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'Ivws3135'
 app.config['MYSQL_DB'] = 'project'

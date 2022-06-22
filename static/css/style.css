@@ -1730,10 +1730,10 @@ button#page-header-user-dropdown {
 }
 
 .header-profile-user {
-    /* height: 60px;
+    height: _0px;
     width: 60px;
     background-color: #f6f6f6;
-    padding: 3px */
+    padding: 3px
 }
 
 .noti-icon i {
