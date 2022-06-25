@@ -10,7 +10,7 @@ app.secret_key = 'qOjLneE5QOa8AEF1GQGhQelVN3452Iwf'
 
 # Enter your database connection details below
 app.config['MYSQL_HOST'] = 'localhost'
-# app.config['MYSQL_PORT'] = 3307
+app.config['MYSQL_PORT'] = 3307
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'Ivws3135'
 app.config['MYSQL_DB'] = 'project'
@@ -24,6 +24,8 @@ mysql = MySQL(app)
 def home():
     if not 'loggedin' in session:
         return redirect(url_for('Login'))
+    if session['ischef'] == False:
+        return redirect(url_for('userProfile'))
     return render_template('index.html', title = "Dashboard")
 
 
@@ -129,11 +131,15 @@ def Login():
         # If account exists in accounts table in out database
         if account:
             # Create session data, we can access this data in other routes
+            cursor.execute('SELECT * FROM chef_projet WHERE chef_id = %s', (account['emp_id'],))
+            chef = cursor.fetchone()
+            session['ischef'] = True if chef else False
             session['loggedin'] = True
             session['emp_id'] = account['emp_id']
             session['username'] = account['username']
             session['email'] = account['email']
             # Redirect to home page
+            print(session['ischef'])
             return redirect(url_for('home'))
         else:
             # Account doesnt exist or username/password incorrect
@@ -180,7 +186,7 @@ def userProfile():
         # Check if account exists using MySQL
 
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute('SELECT * FROM emp WHERE emp_id = %s', (session['emp_id'],))
+    cursor.execute('SELECT emp_id,fullName,dpt_name,joinDate,email,phone,status FROM emp e INNER JOIN departement d ON e.dpt_id = d.dpt_id WHERE emp_id = %s', (session['emp_id'],))
     account = cursor.fetchone()
 
     
