@@ -220,7 +220,7 @@ def userProfile():
                     WHERE ee.emp_id = %s and status = 'Completed' ''', (session['emp_id'],))
     finished = cursor.fetchone()
 
- 
+    print(account)
     return render_template('user-profile.html', data = account, taskData = task, totalTasks = totalTasks , running = run, hold = hold, finished = finished)
 
 # API
