@@ -10,7 +10,6 @@ app.secret_key = 'qOjLneE5QOa8AEF1GQGhQelVN3452Iwf'
 
 # Enter your database connection details below
 app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_PORT'] = 3307
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'Ivws3135'
 app.config['MYSQL_DB'] = 'project'
@@ -40,6 +39,12 @@ def messageReceived(methods=['GET', 'POST']):
 def handle_my_custom_event(json, methods=['GET', 'POST']):
     print('received my event: ' + str(json))
     socketio.emit('my response', json, callback=messageReceived)
+
+@app.route('/newProject')
+def newProject():
+    if not 'loggedin' in session:
+        return redirect(url_for('Login'))
+    return render_template('new-project.html',title="New Project")
 
 @app.route('/task/update/<int:id>', methods=['GET', 'POST'])
 def taskUpdate(id):
@@ -182,8 +187,6 @@ def userProfile():
     if not 'loggedin' in session:
         return redirect(url_for('Login'))
 
-    
-        # Check if account exists using MySQL
 
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute('SELECT emp_id,fullName,dpt_name,joinDate,email,phone,status FROM emp e INNER JOIN departement d ON e.dpt_id = d.dpt_id WHERE emp_id = %s', (session['emp_id'],))
