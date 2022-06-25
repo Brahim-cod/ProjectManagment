@@ -22,6 +22,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/grid.css')}}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css')}}">
+
+    
 </head>
 
 <body class="sidebar-expand counter-scroll">
@@ -38,31 +40,19 @@
         <div class="main-content project">
             <div class="row">
                 <div class="col-12">
-                    <div class="box">
+                    <form id="addProject" action="/addProject" method="post" class="box" autocomplete="off">
                         <div class="box-body">
                             <div class="row">
                                 <div class="col-md-6 col-sm-12 mb-24">
-                                    <div class="form-group"> <label class="form-label">Project Title</label> <input class="form-control" name="PTitle" placeholder="Software Development"> </div>
+                                    <div class="form-group"> <label class="form-label">Project Title</label> <input class="form-control" name="title" placeholder="Software Development"> </div>
                                 </div>
-                                <div class="col-md-6 col-sm-12 mb-24">
-                                    <div class="form-group"> <label class="form-label">Project Title</label> <input class="form-control" placeholder="Software Development"> </div>
-                                </div>
-                            </div>
-                            <div class="row">
                                 <div class="col-md-6 col-sm-12 mb-24">
                                     <div class="form-group"> <label class="form-label">Category:</label>
-                                        <select name="attendance" class="form-control custom-select select2 select2-hidden-accessible" data-placeholder="Select Category" tabindex="-1" aria-hidden="true" data-select2-id="select2-data-22-9i9m">
+                                        <select name="category" class="form-control custom-select select2 select2-hidden-accessible" data-placeholder="Select Category" tabindex="-1" aria-hidden="true" data-select2-id="select2-data-22-9i9m">
                                             <option label="Select Category" data-select2-id="select2-data-24-ktnv"></option> 
-                                            <option value="1">Designing Department</option> 
-                                            <option value="2">Development Department</option> 
-                                            <option value="3">Marketing Department</option> 
-                                            <option value="4">Human Resource Department</option> 
-                                            <option value="5">Managers Department</option> 
-                                            <option value="6">Application Department</option> 
-                                            <option value="7">Support Department</option> 
-                                            <option value="8">IT Department</option> 
-                                            <option value="9">Technical Department</option> 
-                                            <option value="10">Accounts Department</option> 
+                                            {% for item in cats %}
+                                                <option value="{{item.cat_id}}">{{item.cat_name}}</option> 
+                                            {% endfor %}
                                         </select>
                                         <span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="select2-data-23-72at" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-attendance-92-container" aria-controls="select2-attendance-92-container"><span class="select2-selection__rendered" id="select2-attendance-92-container" role="textbox" aria-readonly="true" title="Select Category"></span>
                                         <span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span>
@@ -70,32 +60,17 @@
                                         </span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
                                     </div>
                                 </div>
-                                <div class="col-md-6 col-sm-12 mb-24">
-                                    <div class="form-group"> <label class="form-label">Project Priority:</label> <select name="attendance" class="form-control custom-select select2 select2-hidden-accessible" data-placeholder="Select Priority" tabindex="-1" aria-hidden="true"
-                                            data-select2-id="select2-data-30-l6ni"><option label="Select Priority" data-select2-id="select2-data-32-qodq"></option> <option value="1">High</option> <option value="2">Medium</option> <option value="3">Low</option> </select>
-                                        <span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="select2-data-31-dlj3" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-attendance-wo-container" aria-controls="select2-attendance-wo-container"><span class="select2-selection__rendered" id="select2-attendance-wo-container" role="textbox" aria-readonly="true" title="Select Priority"></span>
-                                        <span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span>
-                                        </span>
-                                        </span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
-                                    </div>
-                                </div>
                             </div>
                             <div class="row">
+                                
                                 <div class="col-md-6 col-sm-12 mb-24">
-                                    <div class="form-group"> <label class="form-label">Client:</label> <select name="attendance" class="form-control custom-select select2 select2-hidden-accessible" data-placeholder="Select Client" tabindex="-1" aria-hidden="true" data-select2-id="select2-data-38-9jkg"><option label="Select Client" data-select2-id="select2-data-40-q3xu"></option> <option value="1">Client 01</option> <option value="2">Client 02</option> <option value="3">Client 03</option> </select>
-                                        <span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="select2-data-39-684b" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-attendance-8z-container" aria-controls="select2-attendance-8z-container"><span class="select2-selection__rendered" id="select2-attendance-8z-container" role="textbox" aria-readonly="true" title="Enter Client"></span>
-                                        <span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span>
-                                        </span>
-                                        </span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-sm-12 mb-24">
-                                    <div class="form-group"> <label class="form-label">Price ( $ )</label> <input class="form-control" placeholder="Enter Price"> </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-sm-12 mb-24">
-                                    <div class="form-group "> <label class="form-label">Assign Team:</label> <select name="attendance" class="form-control custom-select select2 select2-hidden-accessible" data-placeholder="Select Client" tabindex="-1" aria-hidden="true" data-select2-id="select2-data-38-9jkg"><option label="Select Team" data-select2-id="select2-data-40-q3xu"></option> <option value="1">Team 01</option> <option value="2">Team 02</option> <option value="3">Team 03</option> </select>
+                                    <div class="form-group "> <label class="form-label">Assign Team:</label> 
+                                        <select name="team" class="form-control custom-select select2 select2-hidden-accessible" data-placeholder="Select Client" tabindex="-1" aria-hidden="true" data-select2-id="select2-data-38-9jkg">
+                                            <option label="Select Team" data-select2-id="select2-data-40-q3xu"></option> 
+                                            {% for item in teams %}
+                                            <option value="{{item.equipe_id}}">{{item.nomEQ}}</option> 
+                                            {% endfor %} 
+                                        </select>
                                         <span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="select2-data-39-684b" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-attendance-8z-container" aria-controls="select2-attendance-8z-container"><span class="select2-selection__rendered" id="select2-attendance-9z-container" role="textbox" aria-readonly="true" title="Enter Client"></span>
                                         <span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span>
                                         </span>
@@ -107,7 +82,7 @@
                                         <div class="input-group">
                                             <div class="input-group-prepend">
                                                 <div class="input-group-text"> <i class='bx bx-calendar'></i> </div>
-                                            </div><input class="form-control fc-datepicker" placeholder="DD-MM-YYY" type="text"> </div>
+                                            </div><input name="StartDate" class="form-control fc-datepicker" placeholder="DD-MM-YYY" type="date"> </div>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-sm-12 mb-24">
@@ -115,41 +90,51 @@
                                         <div class="input-group">
                                             <div class="input-group-prepend">
                                                 <div class="input-group-text"> <i class='bx bx-calendar'></i> </div>
-                                            </div><input class="form-control fc-datepicker" placeholder="DD-MM-YYY" type="text"> </div>
+                                            </div><input name="EndDate" class="form-control fc-datepicker" placeholder="DD-MM-YYY" type="date"> </div>
                                     </div>
                                 </div>
                             </div>
+                           
 
                             <div class="form-group mb-24"> <label class="form-label">Description:</label>
-                                <textarea class="form-control" name="text" cols="30" rows="10"></textarea>
+                                <textarea class="form-control" name="desc" cols="30" rows="10"></textarea>
                             </div>
                             <div class="row">
-                                <div class="col-md-6 col-sm-12">
+                                <!-- <div class="col-md-6 col-sm-12">
                                     <div class="form-group"> <label class="form-label">Attachment:</label>
                                         <div class="input-group file-browser"> <input type="text" class="form-control border-end-0 browse-file" placeholder="choose" readonly=""> <label class="input-group-append mb-0"> <span class="btn ripple btn-light"> Browse <input type="file" class="file-browserinput" style="display: none;" multiple=""> </span> </label>                                            </div>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="col-md-6 col-sm-12">
                                     <div class="custom-controls-stacked d-lg-flex align-items-center">
                                         <label class="form-label mt-1 fs-18 font-w500 color-primary">Work Status :</label>
                                         <label class="custom-control custom-radio success me-4">
-                                            <input type="radio" class="custom-control-input" name="example-radios1" value="option1">
+                                            <input type="radio" class="custom-control-input" name="status" value="Completed">
                                             <span class="custom-control-label">Completed</span>
                                         </label>
                                         <label class="custom-control custom-radio success me-4">
-                                            <input type="radio" class="custom-control-input" name="example-radios1" value="option2"> 
+                                            <input type="radio" class="custom-control-input" name="status" value="Pending"> 
                                             <span class="custom-control-label">Pending</span>
                                         </label>
                                         <label class="custom-control custom-radio success me-4">
-                                            <input type="radio" class="custom-control-input" name="example-radios1" value="option3">
+                                            <input type="radio" class="custom-control-input" name="status" value="On Progress">
                                             <span class="custom-control-label">On Progress</span>
                                         </label>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="gr-btn mt-15"> <a href="#" class="btn btn-danger btn-lg mr-15 fs-16">CLOSE</a> <a href="#" class="btn btn-primary btn-lg fs-16" onclick="not1()">SUBMIT</a> </div>
-                    </div>
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% if messages %}
+                                <div class="alert alert-{{ messages.0.0 }} " role="alert">
+                                {% for category, message in messages %}
+                                    <span class="{{'badge-danger-light'}}"> {{ message }} </span> 
+                                {% endfor %}
+                                </div>
+                            {% endif %}
+                        {% endwith %}
+                        <div class="gr-btn mt-15"> <button type="reset" class="btn btn-danger btn-lg mr-15 fs-16">CLOSE</a> <button id="sbtbtn" class="btn btn-primary btn-lg fs-16" onclick="not1()" type="submit">SUBMIT</button> </div>
+                    </form>
                 </div>
 
             </div>
@@ -273,6 +258,27 @@
     <script src="{{ url_for('static', filename='js/shortcode.js')}}"></script>
     <script src="{{ url_for('static', filename='js/pages/datepicker.js')}}"></script>
 
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.js"
+          integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+          crossorigin="anonymous"></script>
+    <script>
+        $("#sbtbtn").click(function() {
+
+        var url = "/addProject"; // the script where you handle the form input.
+        console.log('js test')
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: $("#addProject").serialize(), // serializes the form's elements.
+            success: function(data)
+            {
+                alert(data); // show response from the php script.
+            }
+            });
+
+        return false; // avoid to execute the actual submit of the form.
+        });
+    </script> -->
 </body>
 
 </html>

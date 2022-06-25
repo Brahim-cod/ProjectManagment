@@ -5,6 +5,40 @@ import MySQLdb
 import re
 from flask_socketio import SocketIO
 
+
+alphabets= "([A-Za-z])"
+prefixes = "(Mr|St|Mrs|Ms|Dr)[.]"
+suffixes = "(Inc|Ltd|Jr|Sr|Co)"
+starters = "(Mr|Mrs|Ms|Dr|He\s|She\s|It\s|They\s|Their\s|Our\s|We\s|But\s|However\s|That\s|This\s|Wherever)"
+acronyms = "([A-Z][.][A-Z][.](?:[A-Z][.])?)"
+websites = "[.](com|net|org|io|gov)"
+
+def split_into_sentences(text):
+    text = " " + text + "  "
+    text = text.replace("\n"," ")
+    text = re.sub(prefixes,"\\1<prd>",text)
+    text = re.sub(websites,"<prd>\\1",text)
+    if "Ph.D" in text: text = text.replace("Ph.D.","Ph<prd>D<prd>")
+    text = re.sub("\s" + alphabets + "[.] "," \\1<prd> ",text)
+    text = re.sub(acronyms+" "+starters,"\\1<stop> \\2",text)
+    text = re.sub(alphabets + "[.]" + alphabets + "[.]" + alphabets + "[.]","\\1<prd>\\2<prd>\\3<prd>",text)
+    text = re.sub(alphabets + "[.]" + alphabets + "[.]","\\1<prd>\\2<prd>",text)
+    text = re.sub(" "+suffixes+"[.] "+starters," \\1<stop> \\2",text)
+    text = re.sub(" "+suffixes+"[.]"," \\1<prd>",text)
+    text = re.sub(" " + alphabets + "[.]"," \\1<prd>",text)
+    if "”" in text: text = text.replace(".”","”.")
+    if "\"" in text: text = text.replace(".\"","\".")
+    if "!" in text: text = text.replace("!\"","\"!")
+    if "?" in text: text = text.replace("?\"","\"?")
+    text = text.replace(".",".<stop>")
+    text = text.replace("?","?<stop>")
+    text = text.replace("!","!<stop>")
+    text = text.replace("<prd>",".")
+    sentences = text.split("<stop>")
+    sentences = sentences[:-1]
+    sentences = [s.strip() for s in sentences]
+    return sentences
+
 app = Flask(__name__)
 app.secret_key = 'qOjLneE5QOa8AEF1GQGhQelVN3452Iwf'
 
@@ -40,11 +74,38 @@ def handle_my_custom_event(json, methods=['GET', 'POST']):
     print('received my event: ' + str(json))
     socketio.emit('my response', json, callback=messageReceived)
 
-@app.route('/newProject')
+@app.route('/newProject', methods=['GET', 'POST'])
 def newProject():
     if not 'loggedin' in session:
         return redirect(url_for('Login'))
-    return render_template('new-project.html',title="New Project")
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('SELECT * FROM categorie')
+    cat = cursor.fetchall()
+
+    cursor.execute("SELECT * FROM equipe WHERE equipe_id not in (select equipe_id from projet) OR equipe_id in (select equipe_id from projet WHERE status = 'On Progress')")
+    teams = cursor.fetchall()
+    return render_template('new-project.html',title = "New Project", cats = cat, teams = teams)
+
+@app.route('/addProject', methods=['GET', 'POST'])
+def addProject():
+    if not 'loggedin' in session:
+            return redirect(url_for('Login'))
+    if request.method == 'POST':
+        title =  request.form['title']
+        cat =  request.form['category']
+        team = request.form['team']
+        startDate =  request.form['StartDate']
+        endDate =  request.form['EndDate']
+        desc = request.form['desc']
+        if  startDate > endDate:
+            flash('Ended date must be greater than started date!', "Error")
+            return redirect(url_for('newProject'))
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('''INSERT INTO projet (nomP,datedebut,datefin,descriptionP,cat_id,equipe_id)
+                        VALUES (%s,%s,%s,%s,%s,%s)''', (title, startDate, endDate, desc, cat, team, ))
+        mysql.connection.commit()
+    return redirect(url_for('newProject'))
+
 
 @app.route('/task/update/<int:id>', methods=['GET', 'POST'])
 def taskUpdate(id):
@@ -177,7 +238,9 @@ def projectdetails(id):
     # Fetch one record and return result
     projet = cursor.fetchone()
     if projet is None:
-        return redirect(url_for('Login'))
+        return render_template('404.html')
+    print(split_into_sentences(projet['descriptionP']))
+    
     return render_template('project-details.html', title = "Project Details", data = projet)
 
         
@@ -400,7 +463,7 @@ def formatter(val):
 @app.errorhandler(404)
 def page_not_found(error):
     # return 'Erreur'
-    return render_template('404.html', title = 'error'), 404
+    return render_template('404.html'), 404
 
 
 if __name__ == '__main__':
