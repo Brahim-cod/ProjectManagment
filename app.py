@@ -204,8 +204,9 @@ def Login():
             session['emp_id'] = account['emp_id']
             session['username'] = account['username']
             session['email'] = account['email']
+            cursor.execute('UPDATE emp set status = true WHERE emp_id = %s', (session['emp_id'],))
+            mysql.connection.commit()
             # Redirect to home page
-            print(session['ischef'])
             return redirect(url_for('home'))
         else:
             # Account doesnt exist or username/password incorrect
@@ -215,12 +216,16 @@ def Login():
 @app.route('/logout')
 def Logout():
     # Remove session data, this will log the user out
-   session.pop('loggedin', None)
-   session.pop('emp_id', None)
-   session.pop('username', None)
-   session.pop('email', None)
-   # Redirect to login page
-   return redirect(url_for('Login'))
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('UPDATE emp set status = false WHERE emp_id = %s', (session['emp_id'],))
+    mysql.connection.commit()
+    session.pop('loggedin', None)
+    session.pop('emp_id', None)
+    session.pop('username', None)
+    session.pop('email', None)
+    session.pop('ischef', None)
+    # Redirect to login page
+    return redirect(url_for('Login'))
 
 
 
@@ -256,40 +261,25 @@ def userProfile():
     account = cursor.fetchone()
 
     
-    cursor.execute('''SELECT tache_id, nomT, priority, dateD, dateF, etat, status, t.projet_id  
-                    FROM tache t INNER JOIN projet p ON t.projet_id = p.projet_id
-                    INNER JOIN equipe e ON p.equipe_id = e.equipe_id
-                    INNER JOIN emp_equipe ee ON e.equipe_id = ee.equipe_id
-                    WHERE ee.emp_id = %s''', (session['emp_id'],))
+    cursor.execute('''SELECT tache_id, nomT, priority, dateD, dateF, etat, status, projet_id  
+                    FROM tache WHERE emp_id = %s''', (session['emp_id'],))
 
     task = cursor.fetchall()
 
     
-    cursor.execute('''SELECT COUNT(status) as task FROM tache t INNER JOIN projet p ON t.projet_id = p.projet_id
-                    INNER JOIN equipe e ON p.equipe_id = e.equipe_id
-                    INNER JOIN emp_equipe ee ON e.equipe_id = ee.equipe_id
-                    WHERE ee.emp_id = %s''', (session['emp_id'],))
+    cursor.execute('''SELECT COUNT(status) as task FROM tache WHERE emp_id = %s''', (session['emp_id'],))
     totalTasks = cursor.fetchone()
 
     
-    cursor.execute('''SELECT COUNT(status) as task FROM tache t INNER JOIN projet p ON t.projet_id = p.projet_id
-                    INNER JOIN equipe e ON p.equipe_id = e.equipe_id
-                    INNER JOIN emp_equipe ee ON e.equipe_id = ee.equipe_id
-                    WHERE ee.emp_id = %s and status = 'On Hold' ''', (session['emp_id'],))
+    cursor.execute('''SELECT COUNT(status) as task FROM tache WHERE emp_id = %s and status = 'On Hold' ''', (session['emp_id'],))
     hold = cursor.fetchone()
 
     
-    cursor.execute('''SELECT COUNT(status) as task FROM tache t INNER JOIN projet p ON t.projet_id = p.projet_id
-                    INNER JOIN equipe e ON p.equipe_id = e.equipe_id
-                    INNER JOIN emp_equipe ee ON e.equipe_id = ee.equipe_id
-                    WHERE ee.emp_id = %s and status = 'Dealy' ''', (session['emp_id'],))
+    cursor.execute('''SELECT COUNT(status) as task FROM tache WHERE emp_id = %s and status = 'Dealy' ''', (session['emp_id'],))
     run = cursor.fetchone()
 
     
-    cursor.execute('''SELECT COUNT(status) as task FROM tache t INNER JOIN projet p ON t.projet_id = p.projet_id
-                    INNER JOIN equipe e ON p.equipe_id = e.equipe_id
-                    INNER JOIN emp_equipe ee ON e.equipe_id = ee.equipe_id
-                    WHERE ee.emp_id = %s and status = 'Completed' ''', (session['emp_id'],))
+    cursor.execute('''SELECT COUNT(status) as task FROM tache WHERE emp_id = %s and status = 'Completed' ''', (session['emp_id'],))
     finished = cursor.fetchone()
 
     print(account)
