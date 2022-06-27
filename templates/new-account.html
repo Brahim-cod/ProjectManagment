@@ -28,32 +28,19 @@
 <body class="sidebar-expand counter-scroll">
 
     <!-- SIDEBAR -->
-    
+    {% include 'components/sidebar.html' %}
     <!-- END SIDEBAR -->
-        <!-- Main Header -->
-       
-        <!-- End Main Header -->
-
+    <!-- Main Header -->
+    {% include 'components/mainheader.html' %}
+    <!-- End Main Header -->
     <!-- MAIN CONTENT -->
-    <div class="main m-0 p-0">
+    <div class="main">
 
-        <div class="main-content m-0 p-1">
+        <div class="main-content">
             <section class="login singup">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="box p-0 px-5">
-                            <div class="box-header d-flex justify-content-between">
-                                <a href="index.html">
-                                    <img src="./images/logo.png" alt="">
-                                </a>
-                                
-                                <div class="action-reg">
-                                    <h4 class="fs-30">Register</h4>
-                                    <a href="new-account.html">Create new account</a>
-                                </div>
-    
-                            </div>
-                            <div class="line"></div>
                             <div class="box-body">
                                 <div class="auth-content my-auto">
     
@@ -63,21 +50,46 @@
                                             <input type="text" class="form-control" name="username" id="username" placeholder="Your Name">
                                         </div>
                                         <div class="mb-3 mt-24">
-                                            <label for="useremail" class="form-label mb-14">E-Mail</label>
+                                            <label for="dept" class="form-label mb-14">Departement</label>
+                                            <select name="dept" id="dept" class="form-control custom-select select2 select2-hidden-accessible" data-placeholder="Select Departement" tabindex="-1" aria-hidden="true" data-select2-id="select2-data-38-9jkg">
+                                                <option label="Select Departement" data-select2-id="select2-data-40-q3xu"></option> 
+                                                {% for item in depts %}
+                                                <option value="{{item.dpt_id}}">{{item.dpt_name}}</option> 
+                                                {% endfor %} 
+                                            </select>
+                                        </div>
+                                        <div class="mb-3 mt-24">
+                                            <label for="useremail" class="form-label mb-14">Email</label>
                                             <input type="email" class="form-control" name="email" id="useremail" placeholder="Your Email" required>
-                                            
+                            
                                             <div class="invalid-feedback">
                                                 Please Enter Email
                                             </div>
                                         </div>
                                         <div class="mb-3 mt-24">
-                                            <label for="role" class="form-label mb-14">Role</label>
-                                            <input type="text" class="form-control" name="role" id="role" placeholder="YOUR ROLE" required>
+                                            <label for="fullname" class="form-label mb-14">Fullname</label>
+                                            <input type="text" class="form-control" name="fullname" id="fullname" placeholder="Your Fullname" required>
                                             
                                             <div class="invalid-feedback">
-                                                Please Enter Role
+                                                Please Enter Fullname
                                             </div>
                                         </div>
+                                        <div class="mb-3 mt-24">
+                                            <label for="joindate" class="form-label mb-14">JoinDate</label>
+                                            <input type="date" class="form-control" name="joindate" id="joindate" placeholder="Your JoindDte" required>
+                                            
+                                            <div class="invalid-feedback">
+                                                Please Enter JoinDate
+                                            </div>
+                                        </div>  
+                                        <div class="mb-3 mt-24">
+                                            <label for="phone" class="form-label mb-14">Phone Number</label>
+                                            <input type="text" class="form-control" name="phone" id="phone" placeholder="Your Phone" required>
+                                            
+                                            <div class="invalid-feedback">
+                                                Please Enter Phone
+                                            </div>
+                                        </div>  
                                         <div class="mb-3 mt-24">
                                             <div class="d-flex align-items-start">
                                                 <div class="flex-grow-1">
@@ -91,55 +103,15 @@
                                             </div>
                                         </div>
     
-                                        <div class="row mb-4">
-                                            <div class="col">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="remember-check">
-                                                    <label class="form-check-label" for="remember-check">
-                                                        I agree to the <a href="#" class="text-primary"> Terms of services</a> & <a href="#" class="text-primary"> Privacy policy</a>
-                                                    </label>
-                                                </div>
-                                                {% if msg %}
-                                                    <div>{{ msg }}</div>
-                                                {% endif %}
-                                            </div>
-    
+                                        <div class="row mb-4 mt-24">  
+                                            {% if msg %}
+                                                <div class="text-danger">{{ msg }}</div>
+                                            {% endif %}   
                                         </div>
                                         <div class="mb-3 mt-29">
-                                            <button class="btn bg-primary color-white w-100 waves-effect waves-light fs-18 font-w500" type="submit">Create Account</button>
+                                            <button class="btn bg-primary color-white w-100 waves-effect waves-light fs-18 font-w500" type="submit">Create Employee</button>
                                         </div>
                                     </form>
-    
-    
-                                    <div class="mt-59 text-center">
-                                        <p class="text-muted mb-0 fs-14">Already have an account ? <a href="user-login.html" class="text-primary fw-semibold">  Sign in </a> </p>
-                                    </div>
-    
-                                    <div class="mt-37 text-center">
-    
-                                        <ul class="list-inline mb-0">
-                                            <li class="list-inline-item">
-                                                <a href="javascript:void()" class="social-list-item text-white">
-                                                    <i class='bx bxl-facebook-square'></i>
-                                                </a>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <a href="javascript:void()" class="social-list-item text-white">
-                                                    <i class='bx bxl-twitter'></i>
-                                                </a>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <a href="javascript:void()" class="social-list-item  text-white">
-                                                    <i class='bx bxl-linkedin-square'></i>
-                                                </a>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <a href="javascript:void()" class="social-list-item  text-white">
-                                                    <i class='bx bxl-google-plus'></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -167,8 +139,7 @@
     <script src="{{ url_for('static', filename='libs/date-picker/datepicker.js')}}"></script>
     <script src="{{ url_for('static', filename='libs/simplebar/simplebar.min.js')}}"></script>
     <script src="{{ url_for('static', filename='libs/password/pass-addon.init.js')}}"></script>
-
-
+    
     <!-- APP JS -->
     <script src="{{ url_for('static', filename='js/main.js')}}"></script>
     <script src="{{ url_for('static', filename='js/shortcode.js')}}"></script>

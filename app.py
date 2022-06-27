@@ -1,4 +1,5 @@
 from asyncio import tasks
+from ntpath import join
 from flask import Flask, flash, jsonify, redirect, render_template, request, session, url_for
 from flask_mysqldb import MySQL
 import MySQLdb
@@ -145,15 +146,20 @@ def taskDelete(id):
 def register():
     # Output message if something goes wrong...
     msg = ''
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('SELECT * FROM departement')
+    depts = cursor.fetchall()
     # Check if "username", "password" and "email" POST requests exist (user submitted form)
-    if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form and 'role' in request.form:
+    if request.method == 'POST':
         # Create variables for easy access
         username = request.form['username']
+        fullname = request.form['fullname']
+        phone = request.form['phone']
+        dept = request.form['dept']
+        joindate = request.form['joindate']
         password = request.form['password']
         email = request.form['email']
-        role=request.form['role']
          # Check if account exists using MySQL
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('SELECT * FROM EMP WHERE username = %s', (username,))
         account = cursor.fetchone()
         # If account exists show error and validation checks
@@ -161,22 +167,21 @@ def register():
             msg = 'Account already exists!'
         elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
             msg = 'Invalid email address!'
-        elif not re.match(r'[A-Za-z0-9]+', username):
+        elif not  re.match(r'[A-Za-z0-9]+', username):
             msg = 'Username must contain only characters and numbers!'
-        elif not role :
-            msg='ROLE NOT FOUND'
-        elif not username or not password or not email or not role:
+        elif not username or not password or not email or not fullname or not phone or not dept or not joindate:
             msg = 'Please fill out the form!'
         else:
             # Account doesnt exists and the form data is valid, now insert new account into accounts table
-            cursor.execute('INSERT INTO EMP VALUES (NULL, %s, %s,%s,%s)', (username, password,role ,email,))
+            cursor.execute('INSERT INTO EMP (fullName,dpt_id,joinDate,username,email,pass,phone) VALUES (%s,%s,%s,%s,%s,%s,%s)', (fullname, dept, joindate, username, email, password, phone, ))
             mysql.connection.commit()
             msg = 'You have successfully registered!'
     elif request.method == 'POST':
         # Form is empty... (no POST data)
         msg = 'Please fill out the form!'
+    
     # Show registration form with message (if any)
-    return render_template('new-account.html', msg = msg)
+    return render_template('new-account.html', msg = msg, title = 'Add Employee' , depts = depts)
 
 
 @app.route('/login/', methods=['GET', 'POST'])
