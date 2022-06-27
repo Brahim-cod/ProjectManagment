@@ -169,6 +169,8 @@ def register():
             msg = 'Invalid email address!'
         elif not  re.match(r'[A-Za-z0-9]+', username):
             msg = 'Username must contain only characters and numbers!'
+        elif not  re.fullmatch(r'[A-Za-z0-9]{8,}', password):
+            msg = 'Password must contain at least 8 characters and numbers!'
         elif not username or not password or not email or not fullname or not phone or not dept or not joindate:
             msg = 'Please fill out the form!'
         else:
@@ -176,9 +178,7 @@ def register():
             cursor.execute('INSERT INTO EMP (fullName,dpt_id,joinDate,username,email,pass,phone) VALUES (%s,%s,%s,%s,%s,%s,%s)', (fullname, dept, joindate, username, email, password, phone, ))
             mysql.connection.commit()
             msg = 'You have successfully registered!'
-    elif request.method == 'POST':
-        # Form is empty... (no POST data)
-        msg = 'Please fill out the form!'
+   
     
     # Show registration form with message (if any)
     return render_template('new-account.html', msg = msg, title = 'Add Employee' , depts = depts)
