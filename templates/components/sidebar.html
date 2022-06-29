@@ -40,6 +40,11 @@
                                New Employee
                             </a>
                         </li>
+                        <li>
+                            <a href="/newTeam">
+                               New Team
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="sidebar-submenu">
@@ -69,32 +74,17 @@
                     </a>
                 </li>
                 <li>
-                    <a href="calendar.html">
+                    <a href="{{ url_for('Calendar') }}">
                         <i class='bx bx-calendar'></i>
                         <span>Calendar</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="message.html">
+                    <a href="{{ url_for('Chat') }}">
                         <i class='bx bxs-message-rounded-detail' ></i>
                         <span>Message</span>
                     </a>
-                </li>
-                <li class="sidebar-submenu">
-                    <a href="chart-apex.html" class="sidebar-menu-dropdown">
-                        <i class='bx bxs-component' ></i>
-                        <span>Components</span>
-                        <div class="dropdown-icon"><i class='bx bx-chevron-down'></i></div>
-                    </a>
-                    <ul class="sidebar-menu sidebar-menu-dropdown-content">
-                        <li>
-                            <a href="chart-apex.html">
-                                Apex Charts
-                            </a>
-                        </li>
-
-                    </ul>
                 </li>
                 <li>
                     <a class="darkmode-toggle" id="darkmode-toggle" onclick="switchTheme()">

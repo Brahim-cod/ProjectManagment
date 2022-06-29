@@ -1,44 +1,13 @@
 from asyncio import tasks
 from ntpath import join
+from turtle import title
 from flask import Flask, flash, jsonify, redirect, render_template, request, session, url_for
 from flask_mysqldb import MySQL
 import MySQLdb
 import re
 from flask_socketio import SocketIO
+from datetime import datetime
 
-
-alphabets= "([A-Za-z])"
-prefixes = "(Mr|St|Mrs|Ms|Dr)[.]"
-suffixes = "(Inc|Ltd|Jr|Sr|Co)"
-starters = "(Mr|Mrs|Ms|Dr|He\s|She\s|It\s|They\s|Their\s|Our\s|We\s|But\s|However\s|That\s|This\s|Wherever)"
-acronyms = "([A-Z][.][A-Z][.](?:[A-Z][.])?)"
-websites = "[.](com|net|org|io|gov)"
-
-def split_into_sentences(text):
-    text = " " + text + "  "
-    text = text.replace("\n"," ")
-    text = re.sub(prefixes,"\\1<prd>",text)
-    text = re.sub(websites,"<prd>\\1",text)
-    if "Ph.D" in text: text = text.replace("Ph.D.","Ph<prd>D<prd>")
-    text = re.sub("\s" + alphabets + "[.] "," \\1<prd> ",text)
-    text = re.sub(acronyms+" "+starters,"\\1<stop> \\2",text)
-    text = re.sub(alphabets + "[.]" + alphabets + "[.]" + alphabets + "[.]","\\1<prd>\\2<prd>\\3<prd>",text)
-    text = re.sub(alphabets + "[.]" + alphabets + "[.]","\\1<prd>\\2<prd>",text)
-    text = re.sub(" "+suffixes+"[.] "+starters," \\1<stop> \\2",text)
-    text = re.sub(" "+suffixes+"[.]"," \\1<prd>",text)
-    text = re.sub(" " + alphabets + "[.]"," \\1<prd>",text)
-    if "”" in text: text = text.replace(".”","”.")
-    if "\"" in text: text = text.replace(".\"","\".")
-    if "!" in text: text = text.replace("!\"","\"!")
-    if "?" in text: text = text.replace("?\"","\"?")
-    text = text.replace(".",".<stop>")
-    text = text.replace("?","?<stop>")
-    text = text.replace("!","!<stop>")
-    text = text.replace("<prd>",".")
-    sentences = text.split("<stop>")
-    sentences = sentences[:-1]
-    sentences = [s.strip() for s in sentences]
-    return sentences
 
 app = Flask(__name__)
 app.secret_key = 'qOjLneE5QOa8AEF1GQGhQelVN3452Iwf'
@@ -64,7 +33,7 @@ def home():
 
 
 @app.route('/chat')
-def sessions():
+def Chat():
     return render_template('message.html', title="Message")
 
 def messageReceived(methods=['GET', 'POST']):
@@ -107,6 +76,37 @@ def addProject():
         mysql.connection.commit()
     return redirect(url_for('newProject'))
 
+@app.route('/newTeam')
+def Team():
+    if not 'loggedin' in session:
+        return redirect(url_for('Login'))
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('Select emp_id, fullName, dpt_name from emp e, departement d Where d.dpt_id = e.dpt_id and emp_id not in (select emp_id from emp_equipe where equipe_id not in (select equipe_id from projet where datefin < CURDATE())) and emp_id not in (select chef_id from chef_projet)')
+    emps = cursor.fetchall()
+    return render_template('new-team.html', emps = emps)
+
+@app.route('/addTeam', methods=['GET', 'POST'])
+def addTeam():
+    if not 'loggedin' in session:
+            return redirect(url_for('Login'))
+    if request.method == 'POST':
+        nameeq =  request.form['nameeq']
+        emps =  request.form.getlist('empscheck')
+        
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('''INSERT INTO equipe (nomEQ,chef_id)
+                          VALUES (%s,%s)''', (nameeq, session['emp_id'], ))
+        mysql.connection.commit()
+
+        cursor.execute('SELECT MAX(equipe_id) as id FROM equipe')
+        id = cursor.fetchone()
+        for item in emps:
+            cursor.execute('''INSERT INTO emp_equipe (emp_id,equipe_id)
+                          VALUES (%s,%s)''', (item, id['id'], ))
+            mysql.connection.commit()
+        flash('You have successfully added new Team!', "new")
+    return redirect(url_for('Team'))
+
 
 @app.route('/task/update/<int:id>', methods=['GET', 'POST'])
 def taskUpdate(id):
@@ -115,11 +115,11 @@ def taskUpdate(id):
     if request.method == 'POST' and 'taskName' in request.form and 'taskPriority' in request.form and 'dateStart' in request.form and 'dateFinish' in request.form and 'taskEtat' in request.form and 'taskStatus' in request.form:
         # Create variables for easy access
         name = request.form['taskName']
-        finish=request.form['dateFinish']
+        finish = request.form['dateFinish']
         start = request.form['dateStart']
-        etat=request.form['taskEtat']
+        etat = request.form['taskEtat']
         priority = request.form['taskPriority']
-        status=request.form['taskStatus']
+        status = request.form['taskStatus']
         if etat == '100':
             status = 'Completed'
 
@@ -232,12 +232,124 @@ def Logout():
     # Redirect to login page
     return redirect(url_for('Login'))
 
+@app.route('/calendar')
+def Calendar():
+    if not 'loggedin' in session:
+        return redirect(url_for('Login'))
+    # cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    # cursor.execute('SELECT * FROM event WHERE emp_id = %s', (session['emp_id'],))
+    # events = cursor.fetchall()
+    return render_template('calendar.html', title = 'Calendar')
 
+
+@app.route('/api/calendar')
+def events():
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('SELECT * FROM event WHERE emp_id = %s', (session['emp_id'],))
+    events = cursor.fetchall()
+    
+
+    cursor.execute('select * from tache where emp_id = %s', (session['emp_id'],))
+    tasks =  cursor.fetchall()
+    e = []
+    for item in events:
+            i = {
+                    'title': item['nomE'],
+                    'start': item['dateD'].strftime('%Y-%m-%d'),
+                    'end': item['dateF'].strftime('%Y-%m-%d')
+                }
+            e.append(i)
+
+    for item in tasks:
+        i = {
+                'title': item['nomT'],
+                'start': item['dateD'].strftime('%Y-%m-%d'),
+            }
+        y = {
+                'title': item['nomT'],
+                'start': item['dateF'].strftime('%Y-%m-%d'),
+            }
+        e.append(i)
+        e.append(y)
+    es = {
+        'headerToolbar': {
+            'left': 'prev,next today',
+            'center': 'title',
+            'right': 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+        },
+        'initialDate': datetime.today().strftime('%Y-%m-%d'),
+        'navLinks': True, 
+        'businessHours': True, 
+        'editable': True,
+        'selectable': True,
+        'events': [{
+                'title': 'Business Lunch',
+                'start': '2020-09-03T13:00:00',
+                'constraint': 'businessHours'
+            },
+            {
+                'title': 'Meeting',
+                'start': '2020-09-13T11:00:00',
+                'constraint': 'availableForMeeting', 
+                'color': '#257e4a'
+            },
+            {
+                'title': 'Conference',
+                'start': '2020-09-01T11:00:00',
+                'end': '2020-09-01T14:00:00'
+            },
+            {
+                'title': 'Party',
+                'start': '2020-09-29T20:00:00'
+            },
+            {
+                'groupId': 'availableForMeeting',
+                'start': '2020-09-11T10:00:00',
+                'end': '2020-09-11T16:00:00',
+                'display': 'background'
+            },
+            {
+                'groupId': 'availableForMeeting',
+                'start': '2020-09-13T10:00:00',
+                'end': '2020-09-13T16:00:00',
+                'display': 'background'
+            },
+            {
+                'start': '2020-09-24',
+                'end': '2020-09-28',
+                'overlap': False,
+                'display': 'background',
+                'color': '#ff9f89'
+            },
+            {
+                'start': '2020-09-06',
+                'end': '2020-09-08',
+                'overlap': False,
+                'display': 'background',
+                'color': '#ff9f89'
+            }
+        ]
+        }
+    return jsonify(es)
+    
 
 @app.route('/projects')
 def Projects():
     #Get all project from database
-    return render_template('project.html', title="Projects")
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('SELECT * FROM projet')
+    projets = cursor.fetchall()
+
+    cursor.execute("SELECT COUNT(*) FROM projet WHERE status = 'On Progress'")
+    onp = cursor.fetcone()
+
+    cursor.execute("SELECT COUNT(*) FROM projet WHERE status = 'Pending'")
+    pd = cursor.fetcone()
+
+    cursor.execute("SELECT COUNT(*) FROM projet WHERE status = 'Completed'")
+    cm = cursor.fetcone()
+
+    return render_template('project.html', title="Projects", projets = projets, onp = onp, pd = pd, cm = cm)
 
 @app.route('/project-details/<int:id>')
 def projectdetails(id):
@@ -248,9 +360,7 @@ def projectdetails(id):
     # Fetch one record and return result
     projet = cursor.fetchone()
     if projet is None:
-        return render_template('404.html')
-    print(split_into_sentences(projet['descriptionP']))
-    
+        return render_template('404.html')    
     return render_template('project-details.html', title = "Project Details", data = projet)
 
         
@@ -287,7 +397,6 @@ def userProfile():
     cursor.execute('''SELECT COUNT(status) as task FROM tache WHERE emp_id = %s and status = 'Completed' ''', (session['emp_id'],))
     finished = cursor.fetchone()
 
-    print(account)
     return render_template('user-profile.html', data = account, taskData = task, totalTasks = totalTasks , running = run, hold = hold, finished = finished)
 
 # API
