@@ -46,7 +46,7 @@
                             <div class="content text-center color-6">
                                 <h5 class="title-box fs-17 font-w500">Total Project</h5>
                                 <div class="themesflat-counter fs-18 font-wb">
-                                    <span class="number" data-from="0" data-to="309" data-speed="2500" data-inviewport="yes">1225 +</span>
+                                    <span class="number" data-from="0" data-to="309" data-speed="2500" data-inviewport="yes">{{pjTotal}} +</span>
                                 </div>
                             </div>
                         </div>
@@ -55,7 +55,7 @@
                             <div class="content text-center color-7">
                                 <h5 class="title-box fs-17 font-w500">Pending Project</h5>
                                 <div class="themesflat-counter fs-18 font-wb">
-                                    <span class="number" data-from="0" data-to="309" data-speed="2500" data-inviewport="yes">75 +</span>
+                                    <span class="number" data-from="0" data-to="309" data-speed="2500" data-inviewport="yes">{{pd.count}} +</span>
                                 </div>
                             </div>
                         </div>
@@ -64,7 +64,7 @@
                             <div class="content text-center color-8">
                                 <h5 class="title-box fs-17 font-w500">On Going project</h5>
                                 <div class="themesflat-counter fs-18 font-wb">
-                                    <span class="number" data-from="0" data-to="309" data-speed="2500" data-inviewport="yes">1225 +</span>
+                                    <span class="number" data-from="0" data-to="309" data-speed="2500" data-inviewport="yes">{{onp.count}} +</span>
                                 </div>
                             </div>
                         </div>
@@ -73,7 +73,7 @@
                             <div class="content text-center color-9">
                                 <h5 class="title-box fs-17 font-w500">Complete Project</h5>
                                 <div class="themesflat-counter fs-18 font-wb">
-                                    <span class="number" data-from="0" data-to="309" data-speed="2500" data-inviewport="yes">2536 +</span>
+                                    <span class="number" data-from="0" data-to="309" data-speed="2500" data-inviewport="yes">{{cm.count}} +</span>
                                 </div>
                             </div>
                         </div>
@@ -110,13 +110,15 @@
                         </div>
                     </div>
                     <div class="row">
+                        
+                        {% for item in projets %}
                         <div class="col-3 col-xl-6 col-md-6 col-sm-12">
                             <div class="box left-dot">
                                 <div class="box-body">
                                     <div class="row">
                                         <div class="col-12 mb-10">
-                                            <div class="mt-0 text-start"> <a href="project-details.html" class="box-title mb-0 mt-1 mb-3 font-w600 fs-18">Adobe XD</a>
-                                                <p class="fs-14 font-w500 text-muted mb-6">Designing Department</p>
+                                            <div class="mt-0 text-start"> <a href="/project-details/{{item.projet_id}}" class="box-title mb-0 mt-1 mb-3 font-w600 fs-18">{{item.nomP}}</a>
+                                                <p class="fs-14 font-w500 text-muted mb-6">{{item.nomEQ}}</p>
                                                 <span class="fs-13  mt-2 text-muted">There are many variations of passages</span>
                                             </div>
                                             <img src="{{ url_for('static', filename='images/icon/experience.png')}}" alt="img" class="img-box">
@@ -127,14 +129,18 @@
                                     <div class="d-flex align-items-center">
                                         <div class="d-flex mb-3 mb-md-0">
                                             <div class="mr-10">
-                                                <div class="chart-circle chart-circle-xs" data-value="0.75" data-thickness="3" data-color="#3C21F7"><canvas width="40" height="40"></canvas>
-                                                    <div class="chart-circle-value">75%</div>
-                                                </div>
+                                                {% for i in tots %}
+                                                    {% if i.projet_id == item.projet_id %}
+                                                        <div class="chart-circle chart-circle-xs" data-value="{{ i.CompletedCount / i.total }}" data-thickness="3" data-color="#3C21F7"><canvas width="40" height="40"></canvas>
+                                                            <div class="chart-circle-value">{{i.CompletedCount / i.total * 100}}%</div>
+                                                        </div>
+                                                    {% endif %}
+                                                {% endfor %}
                                             </div>
                                             <ul class="user-list mb-0">
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-1.png')}}" alt="user"></li>
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-2.png')}}" alt="user"></li>
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-3.png')}}" alt="user"></li>
+                                                <li><img src="{{ url_for('static', filename='mages/profile/profile.png')}}" alt="user"></li>
+                                                <li><img src="{{ url_for('static', filename='mages/profile/profile.png')}}" alt="user"></li>
+                                                <li><img src="{{ url_for('static', filename='mages/profile/profile.png')}}" alt="user"></li>
                                             </ul>
 
                                         </div>
@@ -142,10 +148,9 @@
                                             <div class="d-flex">
                                                 <div class="task-btn bg-danger-1 text-danger btn-link fs-14" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Project Priority">High</div> <a class="btn btn-outline-light  text-muted pd-0 fs-34" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class='bx bx-dots-vertical-rounded' ></i></a>
                                                 <ul class="dropdown-menu " role="menu">
-                                                    <li><a href="#"><i class="far fa-eye"></i>View</a></li>
-                                                    <li><a href="#"><i class='bx bx-plus-circle' ></i>Add</a></li>
+                                                    <li><a href="/project-details/{{item.projet_id}}"><i class="far fa-eye"></i>View</a></li>
+                                                    <li><a href="#"><i class='bx bx-plus-circle' ></i>Add Task</a></li>
                                                     <li><a href="#"><i class='bx bx-trash' ></i>Remove</a></li>
-                                                    <li><a href="#"><i class='bx bx-cog' ></i>More</a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -153,135 +158,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-3 col-xl-6 col-md-6 col-sm-12">
-                            <div class="box left-dot">
-                                <div class="box-body">
-                                    <div class="row">
-                                        <div class="col-12 mb-10">
-                                            <div class="mt-0 text-start"> <a href="project-details.html" class="box-title mb-0 mt-1 mb-3 font-w600 fs-18">HTML</a>
-                                                <p class="fs-14 font-w500 text-muted mb-6">HTML Coding Department</p>
-                                                <span class="fs-13  mt-2 text-muted">There are many variations of passages</span>
-                                            </div>
-                                            <img src="{{ url_for('static', filename='images/icon/html.png')}}" alt="img" class="img-box">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="box-footer">
-                                    <div class="d-flex align-items-center">
-                                        <div class="d-flex mb-3 mb-md-0">
-                                            <div class="mr-10">
-                                                <div class="chart-circle chart-circle-xs" data-value="0.75" data-thickness="3" data-color="#3C21F7"><canvas width="40" height="40"></canvas>
-                                                    <div class="chart-circle-value">75%</div>
-                                                </div>
-                                            </div>
-                                            <ul class="user-list mb-0">
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-1.png')}}" alt="user"></li>
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-2.png')}}" alt="user"></li>
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-3.png')}}" alt="user"></li>
-                                            </ul>
-
-                                        </div>
-                                        <div class="ms-auto mt-3 mt-sm-0">
-                                            <div class="d-flex">
-                                                <div class="task-btn bg-success-1 text-success-1 fs-14" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Project Priority">Low</div> <a class="btn btn-outline-light  text-muted pd-0 fs-34" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class='bx bx-dots-vertical-rounded' ></i></a>
-                                                <ul class="dropdown-menu " role="menu">
-                                                    <li><a href="#"><i class="far fa-eye"></i>View</a></li>
-                                                    <li><a href="#"><i class='bx bx-plus-circle' ></i>Add</a></li>
-                                                    <li><a href="#"><i class='bx bx-trash' ></i>Remove</a></li>
-                                                    <li><a href="#"><i class='bx bx-cog' ></i>More</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-3 col-xl-6 col-md-6 col-sm-12">
-                            <div class="box left-dot">
-                                <div class="box-body">
-                                    <div class="row">
-                                        <div class="col-12 mb-10">
-                                            <div class="mt-0 text-start"> <a href="project-details.html" class="box-title mb-0 mt-1 mb-3 font-w600 fs-18">Digital Marketing</a>
-                                                <p class="fs-14 font-w500 text-muted mb-6">Marketing Department</p>
-                                                <span class="fs-13  mt-2 text-muted">There are many variations of passages</span>
-                                            </div>
-                                            <img src="{{ url_for('static', filename='images/icon/marketing.png')}}" alt="img" class="img-box">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="box-footer">
-                                    <div class="d-flex align-items-center">
-                                        <div class="d-flex mb-3 mb-md-0">
-                                            <div class="mr-10">
-                                                <div class="chart-circle chart-circle-xs" data-value="0.75" data-thickness="3" data-color="#3C21F7"><canvas width="40" height="40"></canvas>
-                                                    <div class="chart-circle-value">75%</div>
-                                                </div>
-                                            </div>
-                                            <ul class="user-list mb-0">
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-1.png')}}" alt="user"></li>
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-2.png')}}" alt="user"></li>
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-3.png')}}" alt="user"></li>
-                                            </ul>
-
-                                        </div>
-                                        <div class="ms-auto mt-3 mt-sm-0">
-                                            <div class="d-flex">
-                                                <div class="task-btn bg-yellow-1 text-yellow-1 fs-14" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Project Priority">Medium</div> <a class="btn btn-outline-light  text-muted pd-0 fs-34" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class='bx bx-dots-vertical-rounded' ></i></a>
-                                                <ul class="dropdown-menu " role="menu">
-                                                    <li><a href="#"><i class="far fa-eye"></i>View</a></li>
-                                                    <li><a href="#"><i class='bx bx-plus-circle' ></i>Add</a></li>
-                                                    <li><a href="#"><i class='bx bx-trash' ></i>Remove</a></li>
-                                                    <li><a href="#"><i class='bx bx-cog' ></i>More</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-3 col-xl-6 col-md-6 col-sm-12">
-                            <div class="box left-dot">
-                                <div class="box-body">
-                                    <div class="row">
-                                        <div class="col-12 mb-10">
-                                            <div class="mt-0 text-start"> <a href="project-details.html" class="box-title mb-0 mt-1 mb-3 font-w600 fs-18">Angular</a>
-                                                <p class="fs-14 font-w500 text-muted mb-6">Angular Department</p>
-                                                <span class="fs-13  mt-2 text-muted">There are many variations of passages</span>
-                                            </div>
-                                            <img src="{{ url_for('static', filename='images/icon/angular.png')}}" alt="img" class="img-box">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="box-footer">
-                                    <div class="d-flex align-items-center">
-                                        <div class="d-flex mb-3 mb-md-0">
-                                            <div class="mr-10">
-                                                <div class="chart-circle chart-circle-xs" data-value="0.75" data-thickness="3" data-color="#3C21F7"><canvas width="40" height="40"></canvas>
-                                                    <div class="chart-circle-value">75%</div>
-                                                </div>
-                                            </div>
-                                            <ul class="user-list mb-0">
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-1.png')}}" alt="user"></li>
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-2.png')}}" alt="user"></li>
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-3.png')}}" alt="user"></li>
-                                            </ul>
-
-                                        </div>
-                                        <div class="ms-auto mt-3 mt-sm-0">
-                                            <div class="d-flex">
-                                                <div class="task-btn bg-danger-1 text-danger fs-14" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Project Priority">High</div> <a class="btn btn-outline-light  text-muted pd-0 fs-34" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class='bx bx-dots-vertical-rounded' ></i></a>
-                                                <ul class="dropdown-menu " role="menu">
-                                                    <li><a href="#"><i class="far fa-eye"></i>View</a></li>
-                                                    <li><a href="#"><i class='bx bx-plus-circle' ></i>Add</a></li>
-                                                    <li><a href="#"><i class='bx bx-trash' ></i>Remove</a></li>
-                                                    <li><a href="#"><i class='bx bx-cog' ></i>More</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>

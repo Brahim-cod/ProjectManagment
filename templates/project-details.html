@@ -121,7 +121,7 @@
                         <div class="box-header">
                             <h4 class="box-title">{{data.nomP}}</h4>
                             <div class="box-right d-flex">
-                                <a class="btn" href="project-details.html">Project Details</a>
+                                <a class="btn" href="#">Project Details</a>
                                 <div class="icon-ratting">
                                     <i class='bx bxs-star'></i>
                                 </div>
@@ -130,8 +130,7 @@
                                         <i class='bx bx-dots-vertical-rounded fs-22'></i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_project"><i class="bx bx-trash"></i> Delete</a>
-                                        <a class="dropdown-item" href="#"><i class="bx bx-edit mr-5"></i>Edit</a>
+                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#add_project"><i class="bx bx-edit mr-5"></i>Edit</a>
                                     </div>
                                 </div>
                             </div>
@@ -141,21 +140,18 @@
                             <div class="team-name">
                                 <a href="#" class="team">
                                     <div class="icon"><i class="fas fa-tags"></i></div>
-                                    <h5>Team Name</h5>
+                                    <h5>{{data.nomEQ}}</h5>
                                 </a>
                             </div>
                             <div class="action">
                                 <a href="#" class="comment">32 Comments</a>
-                                <a href="#" class="edit">Edit</a>
-                                <a href="#" class="invite"><i class="fas fa-user-plus mr-5"></i>Invite People</a>
-                                <a href="#" class="add">New<i class="fas fa-caret-down pl-12"></i></a>
                             </div>
                             <ul class="user-list s2">
-                                <li><img src="{{ url_for('static', filename='images/avatar/team-1.png')}}" alt="user"></li>
-                                <li><img src="{{ url_for('static', filename='images/avatar/team-2.png')}}" alt="user"></li>
-                                <li><img src="{{ url_for('static', filename='images/avatar/team-3.png')}}" alt="user"></li>
-                                <li><img src="{{ url_for('static', filename='images/avatar/team-4.png')}}" alt="user"></li>
-                                <li><img src="{{ url_for('static', filename='images/avatar/team-5.png')}}" alt="user"></li>
+                                <li><img src="{{ url_for('static', filename='images/profile/profile.png')}}" alt="user"></li>
+                                <li><img src="{{ url_for('static', filename='images/profile/profile.png')}}" alt="user"></li>
+                                <li><img src="{{ url_for('static', filename='images/profile/profile.png')}}" alt="user"></li>
+                                <li><img src="{{ url_for('static', filename='images/profile/profile.png')}}" alt="user"></li>
+                                <li><img src="{{ url_for('static', filename='images/profile/profile.png')}}" alt="user"></li>
                                 <li class="total"><span>+4</span></li>
                             </ul>
                         </div>
@@ -163,26 +159,6 @@
                         <div class="box-body content">
                             <h4 class="title">Project Description</h4>
                             <p class="fs-18 font-w400 font-main mt-27 mb-29">{{data.descriptionP}}</p>
-                            <ul>
-                                <li>
-                                    <p class="fs-18 font-w600 color-primary mb-23"><span class="pr-19">1.</span>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                </li>
-                                <li>
-                                    <p class="fs-18 font-w600 color-primary mb-23"><span class="pr-15">2.</span>Fusce vitae ligula iaculis, sollicitudin sem at, venenatis turpis.</p>
-                                </li>
-                                <li>
-                                    <p class="fs-18 font-w600 color-primary mb-23"><span class="pr-25">.</span>Maecenas pharetra mi sit amet dolor rhoncus, quis placerat elit cursus.</p>
-                                </li>
-                                <li>
-                                    <p class="fs-18 font-w600 color-primary mb-23"><span class="pr-15">3.</span>Nullam eleifend nisi nec diam varius, vitae malesuada ex eleifend.</p>
-                                </li>
-                                <li>
-                                    <p class="fs-18 font-w600 color-primary mb-23"><span class="pr-25">.</span>Integer convallis nisi quis vestibulum semper.</p>
-                                </li>
-                            </ul>
-                            <h6 class="mt-30">Proin rutrum ipsum quis sem faucibus, in elementum mi dignissim.</h6>
-                            <p class="mt-32 fs-18">Cras eu elit congue, placerat dui ut, tincidunt nisl. Nulla leo elit, pharetra bibendum justo quis, cursus consectetur erat. Sed nec posuere turpis. Maecenas nec bibendum purus. Nulla fringilla, lorem iaculis iaculis fermentum,
-                                ligula nibh mollis ipsum, et scelerisque risus ante eu sem. Phasellus ac sagittis nisi. Suspendisse potenti. Nunc volutpat dui ipsum. Suspendisse potenti.</p>
                             <ul class="list-img">
                                 <li>
                                     <div class="img-dv"><img src="{{ url_for('static', filename='images/product/project-01.jpg')}}" alt=""></div>
@@ -347,27 +323,33 @@
                 <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Create Project</h5>
+                            <h5 class="modal-title">Modifie Project</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form>
+                            <form action="/modifProject/{{data.projet_id}}" method="post" autocomplete="off">
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Project Name</label>
-                                            <input class="form-control" value="" type="text">
+                                            <input class="form-control" name="title" value="{{data.nomP}}" type="text">
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label>Client</label>
-                                            <select class="select">
-                                                <option>Client 1</option>
-                                                <option>Client 2</option>
+                                            <label class="form-label">Category:</label>
+                                            <select name="category" class="form-control custom-select select2 select2-hidden-accessible" data-placeholder="Select Category" tabindex="-1" aria-hidden="true" data-select2-id="select2-data-22-9i9m">
+                                                <option label="Select Category" data-select2-id="select2-data-24-ktnv"></option> 
+                                                {% for item in cats %}
+                                                    <option value="{{item.cat_id}}"  {{'selected' if item.cat_id == data.cat_id }}>{{item.cat_name}}</option> 
+                                                {% endfor %}
                                             </select>
+                                            <span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="select2-data-23-72at" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-attendance-92-container" aria-controls="select2-attendance-92-container"><span class="select2-selection__rendered" id="select2-attendance-92-container" role="textbox" aria-readonly="true" title="Select Category"></span>
+                                            <span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span>
+                                            </span>
+                                            </span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
                                         </div>
                                     </div>
                                 </div>
@@ -376,7 +358,7 @@
                                         <div class="form-group">
                                             <label>Start Date</label>
                                             <div class="cal-icon">
-                                                <input class="form-control " type="date">
+                                                <input class="form-control" name="StartDate" type="date" value="{{data.datedebut}}">
                                             </div>
                                         </div>
                                     </div>
@@ -384,50 +366,66 @@
                                         <div class="form-group">
                                             <label>End Date</label>
                                             <div class="cal-icon">
-                                                <input class="form-control " type="date">
+                                                <input class="form-control" name="EndDate" type="date" value="{{data.datefin}}">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label>Rate</label>
-                                            <input placeholder="$50" class="form-control" value="" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label>&nbsp;</label>
-                                            <select class="select">
-                                                <option>Hourly</option>
-                                                <option selected>Fixed</option>
-                                            </select>
-                                        </div>
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Assign Team:</label> 
+                                        <select name="team" class="form-control custom-select select2 select2-hidden-accessible" data-placeholder="Select Team" tabindex="-1" aria-hidden="true" data-select2-id="select2-data-38-9jkg">
+                                            <option label="Select Team" data-select2-id="select2-data-40-q3xu"></option> 
+                                            {% for item in teams %}
+                                            <option value="{{item.equipe_id}}" {{'selected' if item.equipe_id == data.equipe_id }}>{{item.nomEQ}}</option> 
+                                            {% endfor %} 
+                                        </select>
+                                        <span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="select2-data-39-684b" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-attendance-8z-container" aria-controls="select2-attendance-8z-container"><span class="select2-selection__rendered" id="select2-attendance-9z-container" role="textbox" aria-readonly="true" title="Enter Client"></span>
+                                        <span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span>
+                                        </span>
+                                        </span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label>Priority</label>
-                                            <select class="select">
-                                                <option selected>High</option>
-                                                <option>Medium</option>
-                                                <option>Low</option>
+                                            <label>Status</label>
+                                            <select name="status" class="select">
+                                                <option value="Completed">Completed</option>
+                                                <option value="Pending">Pending</option>
+                                                <option value="On Progress" selected>On Progress</option>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label>Description</label>
-                                    <textarea rows="4" class="form-control" placeholder="Enter your message here"></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label>Upload Files</label>
-                                    <input class="form-control" type="file">
+                                    <textarea rows="4" name="desc" class="form-control" placeholder="Enter your description here"></textarea>
                                 </div>
                                 <div class="submit-section">
-                                    <button class="btn btn-primary submit-btn">Save</button>
+                                    <button class="btn btn-primary submit-btn" type="submit" >Save</button>
                                 </div>
                             </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal custom-modal fade" id="delete_project" role="dialog">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="form-header">
+                                <h3>Delete Project</h3>
+                                <p>Are you sure want to delete {{data.nomP}}?</p>
+                            </div>
+                            <div class="modal-btn delete-action">
+                                <div class="row">
+                                    <div class="col-6 mb-0">
+                                        <a href="javascript:void(0);" class="btn btn-primary continue-btn">Delete</a>
+                                    </div>
+                                    <div class="col-6 mb-0">
+                                        <a href="javascript:void(0);" data-dismiss="modal" class="btn btn-primary cancel-btn">Cancel</a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

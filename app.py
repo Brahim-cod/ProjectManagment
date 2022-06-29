@@ -29,7 +29,25 @@ def home():
         return redirect(url_for('Login'))
     if session['ischef'] == False:
         return redirect(url_for('userProfile'))
-    return render_template('index.html', title = "Dashboard")
+
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+
+    cursor.execute('''SELECT  t.projet_id,
+                              nomP as name,
+                              count(*) AS total,
+                              sum(case when t.status = 'Completed' then 1 else 0 end) AS CompletedCount,
+                              sum(case when t.status <> 'Completed' then 1 else 0 end) AS UncompletedCount
+                          FROM tache t LEFT JOIN projet p ON t.projet_id = p.projet_id
+                      GROUP BY t.projet_id''')
+    tots = cursor.fetchall()
+
+    cursor.execute('''SELECT  
+                              count(*) AS total,
+                              sum(case when status = 'Completed' then 1 else 0 end) AS CompletedCount,
+                              sum(case when status <> 'Completed' then 1 else 0 end) AS UncompletedCount
+                      FROM tache''')
+    taskstot = cursor.fetchone()
+    return render_template('index.html', title = "Dashboard", tots = tots, taskstot = taskstot)
 
 
 @app.route('/chat')
@@ -75,6 +93,25 @@ def addProject():
                         VALUES (%s,%s,%s,%s,%s,%s)''', (title, startDate, endDate, desc, cat, team, ))
         mysql.connection.commit()
     return redirect(url_for('newProject'))
+
+@app.route('/modifProject/<int:id>', methods=['GET', 'POST'])
+def modifProject(id):
+    if not 'loggedin' in session:
+            return redirect(url_for('Login'))
+    if request.method == 'POST':
+        title =  request.form['title']
+        cat =  request.form['category']
+        team = request.form['team']
+        startDate =  request.form['StartDate']
+        endDate =  request.form['EndDate']
+        desc = request.form['desc']
+        if  startDate > endDate:
+            flash('Ended date must be greater than started date!', "Error")
+            return redirect(url_for('newProject'))
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('UPDATE projet set nomP = %s,datedebut = %s,datefin = %s,descriptionP = %s,cat_id = %s,equipe_id = %s where projet_id = %s', (title, startDate, endDate, desc, cat, team, id, ))
+        mysql.connection.commit()
+    return redirect(url_for('Projects'))
 
 @app.route('/newTeam')
 def Team():
@@ -337,31 +374,45 @@ def events():
 def Projects():
     #Get all project from database
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute('SELECT * FROM projet')
+    cursor.execute('SELECT projet_id, nomP, nomEQ FROM projet p inner join equipe e on e.equipe_id = p.equipe_id')
     projets = cursor.fetchall()
 
-    cursor.execute("SELECT COUNT(*) FROM projet WHERE status = 'On Progress'")
-    onp = cursor.fetcone()
+    cursor.execute("SELECT COUNT(*) as count FROM projet WHERE status = 'On Progress'")
+    onp = cursor.fetchone()
 
-    cursor.execute("SELECT COUNT(*) FROM projet WHERE status = 'Pending'")
-    pd = cursor.fetcone()
+    cursor.execute("SELECT COUNT(*) as count FROM projet WHERE status = 'Pending'")
+    pd = cursor.fetchone()
 
-    cursor.execute("SELECT COUNT(*) FROM projet WHERE status = 'Completed'")
-    cm = cursor.fetcone()
+    cursor.execute("SELECT COUNT(*) as count FROM projet WHERE status = 'Completed'")
+    cm = cursor.fetchone()
 
-    return render_template('project.html', title="Projects", projets = projets, onp = onp, pd = pd, cm = cm)
+    cursor.execute('''SELECT projet_id,
+                            count(*) AS total,
+                            sum(case when status = 'Completed' then 1 else 0 end) AS CompletedCount,
+                            sum(case when status <> 'Completed' then 1 else 0 end) AS UncompletedCount
+                      FROM tache
+                    GROUP BY projet_id''')
+    tots = cursor.fetchall()
+
+    return render_template('project.html', title="Projects", projets = projets, onp = onp, pd = pd, cm = cm, pjTotal = len(projets), tots = tots)
 
 @app.route('/project-details/<int:id>')
 def projectdetails(id):
     if not 'loggedin' in session:
         return redirect(url_for('Login'))
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute('SELECT * FROM projet WHERE projet_id = %s', (id,))
+    cursor.execute('SELECT projet_id, nomP, nomEQ, descriptionP, cat_id, p.equipe_id, datefin, datedebut FROM projet p inner join equipe e on e.equipe_id = p.equipe_id WHERE projet_id = %s', (id,))
     # Fetch one record and return result
     projet = cursor.fetchone()
     if projet is None:
-        return render_template('404.html')    
-    return render_template('project-details.html', title = "Project Details", data = projet)
+        return render_template('404.html')   
+
+    cursor.execute('SELECT * FROM categorie')
+    cat = cursor.fetchall()
+
+    cursor.execute("SELECT * FROM equipe WHERE equipe_id not in (select equipe_id from projet) OR equipe_id in (select equipe_id from projet WHERE status = 'On Progress')")
+    teams = cursor.fetchall()
+    return render_template('project-details.html', title = "Project Details", data = projet, cats = cat, teams = teams)
 
         
 
