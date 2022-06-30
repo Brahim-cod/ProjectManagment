@@ -396,7 +396,7 @@ def Projects():
 
     return render_template('project.html', title="Projects", projets = projets, onp = onp, pd = pd, cm = cm, pjTotal = len(projets), tots = tots)
 
-@app.route('/project-details/<int:id>')
+@app.route('/project-details/<int:id>', methods=['GET', 'POST'])
 def projectdetails(id):
     if not 'loggedin' in session:
         return redirect(url_for('Login'))
@@ -412,9 +412,24 @@ def projectdetails(id):
 
     cursor.execute("SELECT * FROM equipe WHERE equipe_id not in (select equipe_id from projet) OR equipe_id in (select equipe_id from projet WHERE status = 'On Progress')")
     teams = cursor.fetchall()
-    return render_template('project-details.html', title = "Project Details", data = projet, cats = cat, teams = teams)
 
-        
+    cursor.execute('SELECT cmt_text, fullName FROM comment c INNER JOIN emp e ON c.emp_id = e.emp_id WHERE projet_id = %s', (id,))
+    cmnts = cursor.fetchall()
+    return render_template('project-details.html', title = "Project Details", data = projet, cats = cat, teams = teams, cmnts = cmnts)
+
+@app.route('/project-comment/<int:id>', methods=['GET', 'POST'])
+def Comment(id):
+    if not 'loggedin' in session:
+        return redirect(url_for('Login'))
+    if request.method == 'POST' and 'message' in request.form:
+        cmnt = request.form['message']
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('INSERT INTO comment (cmt_text, cmnt_date, projet_id, emp_id) VALUES (%s,%s,%s,%s)',(cmnt, datetime.today().strftime('%Y-%m-%d'), id, session['emp_id'],))
+        mysql.connection.commit()
+        print('test')
+    url = "/project-details/%s" % (id)
+    return redirect(url_for('home'))
+       
 
 @app.route('/userProfile')
 def userProfile():

@@ -80,3 +80,15 @@ CREATE TABLE `event` (
   PRIMARY KEY (`event_id`),
   CONSTRAINT `empls_fk` FOREIGN KEY (`emp_id`) REFERENCES `emp` (`emp_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+CREATE TABLE `COMMENT` (
+  `cmnt_id` int NOT NULL AUTO_INCREMENT,
+  `cmt_text` text NOT NULL,
+  `cmnt_date` date NOT NULL,
+  `projet_id` int NOT NULL,
+  `emp_id` int NOT NULL,
+  PRIMARY KEY (`cmnt_id`),
+  CONSTRAINT `empls_cmnt_fk` FOREIGN KEY (`emp_id`) REFERENCES `emp` (`emp_id`),
+  CONSTRAINT `cmnt_fk` FOREIGN KEY (`projet_id`) REFERENCES `projet` (`projet_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
