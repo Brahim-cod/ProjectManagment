@@ -81,7 +81,7 @@
                 </div>
                 <div class="col-3 col-xl-5 col-md-4 col-sm-12">
                     <div class="box h-100 d-flex align-items-center">
-                        <a class="create d-flex bg-primary justify-content-center" href="new-project.html">
+                        <a class="create d-flex bg-primary justify-content-center" href="/newProject">
                             <div class="icon color-white pt-4 pr-8">
                                 <i class='bx bx-plus-circle'></i>
                             </div>
@@ -98,14 +98,7 @@
                         <h4 class="box-title fs-22">Recent Project Update</h4>
                         <div class="card-options">
                             <div class="btn-list d-flex">
-                                <a href="#" class="btn text-primary border-primary d-flex align-items-center mr-5"><i class='bx bx-plus-circle mr-5' ></i>Add Project</a>
-                                <a href="#" class="btn btn-light d-flex align-items-center mr-5"><i class="fas fa-eye mr-5"></i>View All</a>
-                                <a href="#" class="btn btn-light me-0 dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false"> Latest <i class="feather feather-chevron-down"></i> </a>
-                                <ul class="dropdown-menu dropdown-menu-end" role="menu">
-                                    <li><a href="#">Monthly</a></li>
-                                    <li><a href="#">Yearly</a></li>
-                                    <li><a href="#">Weekly</a></li>
-                                </ul>
+                                <a href="/addProject" class="btn text-primary border-primary d-flex align-items-center mr-5"><i class='bx bx-plus-circle mr-5' ></i>Add Project</a>
                             </div>
                         </div>
                     </div>
@@ -138,9 +131,9 @@
                                                 {% endfor %}
                                             </div>
                                             <ul class="user-list mb-0">
-                                                <li><img src="{{ url_for('static', filename='mages/profile/profile.png')}}" alt="user"></li>
-                                                <li><img src="{{ url_for('static', filename='mages/profile/profile.png')}}" alt="user"></li>
-                                                <li><img src="{{ url_for('static', filename='mages/profile/profile.png')}}" alt="user"></li>
+                                                <li><img src="{{ url_for('static', filename='images/profile/profile.png')}}" alt="user"></li>
+                                                <li><img src="{{ url_for('static', filename='images/profile/profile.png')}}" alt="user"></li>
+                                                <li><img src="{{ url_for('static', filename='images/profile/profile.png')}}" alt="user"></li>
                                             </ul>
 
                                         </div>
@@ -150,7 +143,6 @@
                                                 <ul class="dropdown-menu " role="menu">
                                                     <li><a href="/project-details/{{item.projet_id}}"><i class="far fa-eye"></i>View</a></li>
                                                     <li><a href="#"><i class='bx bx-plus-circle' ></i>Add Task</a></li>
-                                                    <li><a href="#"><i class='bx bx-trash' ></i>Remove</a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -192,12 +184,9 @@
                             <div class="row">
                                 <div class="col-6 col-xl-12 col-md-6 col-sm-12 w-sm-100 mb-0">
                                     <ul class="box-list mt-25 pr-60">
-                                        <li><span class="bg-blue square"></span>Web Design<span>25%</span></li>
-                                        <li><span class="bg-success square"></span>UX/UI Design<span>18%</span></li>
-                                        <li><span class="bg-warning square"></span>Graphics Design<span>17%</span></li>
-                                        <li><span class="bg-blue square"></span>Motion Design<span>12.50%</span></li>
-                                        <li><span class="bg-success square"></span>Brand Identity<span>12.50%</span></li>
-                                        <li><span class="bg-warning square"></span>Others<span>12.50%</span></li>
+                                        {% for item in emps %}
+                                        <li><span class="square" style="background-color: {{item.color}};"></span>{{item.dpt_name}}<span>{{"%.2f" % (item.count / dptcount.count * 100)}}%</span></li>
+                                        {% endfor %}
                                     </ul>
                                 </div>
                                 <div class="col-6 col-xl-12 col-md-6 col-sm-12 w-sm-100 mb-0">
@@ -205,12 +194,9 @@
                                     <div class="canvas-container">
                                         <canvas id="chartjs-4" class="chartjs" width="100" height="100"></canvas>
                                         <div class="chart-data">
-                                            <div data-percent="25" data-color="#3C21F7" data-label="Web Design"></div>
-                                            <div data-percent="18" data-color="#00BC8B" data-label="UX/UI Design"></div>
-                                            <div data-percent="17" data-color="#FFB800" data-label="Graphics Design"></div>
-                                            <div data-percent="12.5" data-color="#00ECCC" data-label="Motion Design"></div>
-                                            <div data-percent="12.5" data-color="#EF7F5A" data-label="Brand Identity"></div>
-                                            <div data-percent="12.5" data-color="#5D45FB" data-label="Others"></div>
+                                            {% for item in emps %}
+                                            <div data-percent="{{item.count / dptcount.count * 100}}" data-color="{{item.color}}" data-label="{{item.dpt_name}}"></div>
+                                            {% endfor %}
                                         </div>
                                     </div>
 

@@ -92,6 +92,7 @@ def addProject():
         cursor.execute('''INSERT INTO projet (nomP,datedebut,datefin,descriptionP,cat_id,equipe_id)
                         VALUES (%s,%s,%s,%s,%s,%s)''', (title, startDate, endDate, desc, cat, team, ))
         mysql.connection.commit()
+        flash('Project addesd successfully')
     return redirect(url_for('newProject'))
 
 @app.route('/modifProject/<int:id>', methods=['GET', 'POST'])
@@ -157,9 +158,8 @@ def taskUpdate(id):
         etat = request.form['taskEtat']
         priority = request.form['taskPriority']
         status = request.form['taskStatus']
-        if etat == '100':
-            status = 'Completed'
-
+        if status == 'Completed' or status == 'In Review' or status == 'Approved':
+            etat = 100
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('''UPDATE tache
                         SET nomT = %s, dateF = %s, DateD = %s, etat = %s, priority = %s, status = %s
@@ -394,7 +394,12 @@ def Projects():
                     GROUP BY projet_id''')
     tots = cursor.fetchall()
 
-    return render_template('project.html', title="Projects", projets = projets, onp = onp, pd = pd, cm = cm, pjTotal = len(projets), tots = tots)
+    cursor.execute('SELECT d.dpt_name, COUNT(e.dpt_id) as count, d.color FROM emp e INNER JOIN departement d ON e.dpt_id=d.dpt_id GROUP BY e.dpt_id')
+    emps = cursor.fetchall()
+
+    cursor.execute('SELECT COUNT(*) as count FROM emp')
+    dptcount = cursor.fetchone()
+    return render_template('project.html', title="Projects", projets = projets, onp = onp, pd = pd, cm = cm, pjTotal = len(projets), tots = tots, emps = emps, dptcount = dptcount)
 
 @app.route('/project-details/<int:id>', methods=['GET', 'POST'])
 def projectdetails(id):
@@ -413,9 +418,9 @@ def projectdetails(id):
     cursor.execute("SELECT * FROM equipe WHERE equipe_id not in (select equipe_id from projet) OR equipe_id in (select equipe_id from projet WHERE status = 'On Progress')")
     teams = cursor.fetchall()
 
-    cursor.execute('SELECT cmt_text, fullName FROM comment c INNER JOIN emp e ON c.emp_id = e.emp_id WHERE projet_id = %s', (id,))
+    cursor.execute('SELECT cmt_text, fullName FROM comment c INNER JOIN emp e ON c.emp_id = e.emp_id WHERE projet_id = %s ORDER BY cmnt_date', (id,))
     cmnts = cursor.fetchall()
-    return render_template('project-details.html', title = "Project Details", data = projet, cats = cat, teams = teams, cmnts = cmnts)
+    return render_template('project-details.html', title = "Project Details", data = projet, cats = cat, teams = teams, cmnts = cmnts, cmnttot = len(cmnts))
 
 @app.route('/project-comment/<int:id>', methods=['GET', 'POST'])
 def Comment(id):
@@ -426,9 +431,8 @@ def Comment(id):
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute('INSERT INTO comment (cmt_text, cmnt_date, projet_id, emp_id) VALUES (%s,%s,%s,%s)',(cmnt, datetime.today().strftime('%Y-%m-%d'), id, session['emp_id'],))
         mysql.connection.commit()
-        print('test')
     url = "/project-details/%s" % (id)
-    return redirect(url_for('home'))
+    return redirect(url)
        
 
 @app.route('/userProfile')

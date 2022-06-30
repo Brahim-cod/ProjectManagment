@@ -269,7 +269,9 @@
                                                                                 <option label="Select Work Status" data-select2-id="select2-data-18-ezae"></option> 
                                                                                 <option value="Dealy"  {{'selected' if item.status == 'Dealy'}}>Dealy</option> 
                                                                                 <option value="On hold"  {{'selected' if item.status == 'On hold'}}>On hold</option> 
+                                                                                <option value="In Review"  {{'selected' if item.status == 'In Review'}}>In Review</option> 
                                                                                 <option value="Completed"  {{'selected' if item.status == 'Completed'}}>Completed</option> 
+                                                                                <option value="Approved"  {{'selected' if item.status == 'Approved'}}>Approved</option> 
                                                                             </select>
                                                                         <span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="select2-data-17-6y8j" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-attendance-ws-container" aria-controls="select2-attendance-ws-container"><span class="select2-selection__rendered" id="select2-attendance-ws-container" role="textbox" aria-readonly="true" title="Select Priority"></span>
                                                                         <span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span>
@@ -298,7 +300,7 @@
                                                                 <div class="progress-bar bg-primary w-{{item.etat if item.etat%10 == 0 else item.etat - item.etat%10 + 10}}"></div>
                                                             </div>
                                                         </td>
-                                                        <td><span class="badge {{'badge-danger-light' if item.status == 'Dealy' else 'badge-success-light' if item.status == 'Completed' else  'badge-warning-light'}}">{{item.status}}</span></td>
+                                                        <td><span class="badge {{'badge-danger-light' if item.status == 'Dealy' else 'badge-warning-light' if item.status == 'On hold' else  'badge-success-light'}}">{{item.status}}</span></td>
                                                         <td>
                                                             <div class="dropdown">
                                                                 <a href="javascript:void(0);" class="btn-link" data-bs-toggle="dropdown" aria-expanded="false">
