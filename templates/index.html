@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        Protend - Project Management Admin Dashboard HTML Template
+        IMANAGE - Project Management
     </title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.png')}}" type="image/png">
     <!-- GOOGLE FONT -->
@@ -194,7 +194,7 @@
                                         <div class="card-top">
                                             <div class="sm-f-wrap d-flex">
                                                 <h5 class="icon-gold text-white bg-green">P</h5>
-                                                <a href="project-details.html" class="h5 t-title">{{item.name}}</a>
+                                                <a href="/project-details/{{item.projet_id}}" class="h5 t-title">{{item.name}}</a>
                                             </div>
                                             <div class="dropdown">
                                                 <a href="javascript:void(0);" class="btn-link" data-bs-toggle="dropdown" aria-expanded="false">

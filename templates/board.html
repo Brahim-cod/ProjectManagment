@@ -6,356 +6,45 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        Protend - Project Management Admin Dashboard HTML Template
+        IMANAGE - Project Management 
     </title>
-    <link rel="shortcut icon" href="./images/favicon.png" type="image/png">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.png')}}" type="image/png">
     <!-- GOOGLE FONT -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     <!-- BOXICONS -->
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="css/icons.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/icons.min.css')}}">
 
     <!-- APP CSS -->
-    <link rel="stylesheet" href="./css/bootstrap.min.css">
-    <link rel="stylesheet" href="./css/grid.css">
-    <link rel="stylesheet" href="./css/style.css">
-    <link rel="stylesheet" href="./css/responsive.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/grid.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css')}}">
 </head>
 
 <body class="sidebar-expand">
 
     <!-- SIDEBAR -->
-    <div class="sidebar">
-        <div class="sidebar-logo">
-            <a href="index.html">
-                <img src="./images/logo.png" alt="Protend logo">
-            </a>
-            <div class="sidebar-close" id="sidebar-close">
-                <i class='bx bx-left-arrow-alt'></i>
-            </div>
-        </div>
-        <!-- SIDEBAR MENU -->
-        <div class="simlebar-sc" data-simplebar>
-            <ul class="sidebar-menu tf">
-                <li class="sidebar-submenu">
-                    <a href="index.html" class="sidebar-menu-dropdown">
-                        <i class='bx bxs-home'></i>
-                        <span>Dashboard</span>
-                        <div class="dropdown-icon">
-                            <i class='bx bx-chevron-down'></i>
-                        </div>
-                    </a>
-                    <ul class="sidebar-menu sidebar-menu-dropdown-content">
-                        <li>
-                            <a href="index.html">
-                                Dashboard
-                            </a>
-                        </li>
-                        <li>
-                            <a href="user-profile.html">
-                                User Profile
-                            </a>
-                        </li>
-<li>
-                            <a href="user-login.html">
-                                User Login
-                            </a>
-                        </li>
-                        <li>
-                            <a href="new-account.html">
-                               New Account
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="sidebar-submenu">
-                    <a href="project.html" class="sidebar-menu-dropdown">
-                        <i class='bx bxs-bolt'></i>
-                        <span>Project</span>
-                        <div class="dropdown-icon"><i class='bx bx-chevron-down'></i></div>
-                    </a>
-                    <ul class="sidebar-menu sidebar-menu-dropdown-content">
-                        <li>
-                            <a href="project.html">
-                               Project
-                            </a>
-                        </li>
-                        <li>
-                            <a href="project-details.html">
-                                Project Details
-                            </a>
-                        </li>
-                        <li>
-                            <a href="new-project.html">
-                                New Project
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="sidebar-submenu">
-                    <a href="clients.html" class="sidebar-menu-dropdown">
-                        <i class='bx bxs-user'></i>
-                        <span>Client</span>
-                        <div class="dropdown-icon"><i class='bx bx-chevron-down'></i></div>
-                    </a>
-                    <ul class="sidebar-menu sidebar-menu-dropdown-content">
-                                                <li>
-                            <a href="clients.html">
-                               Manager Client
-                            </a>
-                        </li>
-                        <li>
-                            <a href="client-details.html">
-                                Client Details
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="board.html">
-                        <i class='bx bxs-dashboard'></i>
-                        <span>Board</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="calendar.html">
-                        <i class='bx bx-calendar'></i>
-                        <span>Calendar</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="message.html">
-                        <i class='bx bxs-message-rounded-detail' ></i>
-                        <span>Message</span>
-                    </a>
-                </li>
-                <li class="sidebar-submenu">
-                    <a href="chart-apex.html" class="sidebar-menu-dropdown">
-                        <i class='bx bxs-component' ></i>
-                        <span>Components</span>
-                        <div class="dropdown-icon"><i class='bx bx-chevron-down'></i></div>
-                    </a>
-                    <ul class="sidebar-menu sidebar-menu-dropdown-content">
-                        <li>
-                            <a href="chart-apex.html">
-                                Apex Charts
-                            </a>
-                        </li>
-
-                    </ul>
-                </li>
-                <li>
-                    <a class="darkmode-toggle" id="darkmode-toggle" onclick="switchTheme()">
-                        <div>
-                            <i class='bx bx-cog mr-10'></i>
-                            <span>darkmode</span>
-                        </div>
-
-                        <span class="darkmode-switch"></span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-        <!-- END SIDEBAR MENU -->
-    </div>
+    {% include 'components/sidebar.html' %}
     <!-- END SIDEBAR -->
     <!-- Main Header -->
-    <div class="main-header">
-        <div class="d-flex">
-            <div class="mobile-toggle" id="mobile-toggle">
-                <i class='bx bx-menu'></i>
-            </div>
-            <div class="main-title">
-                Board
-            </div>
-        </div>
-
-        <div class="d-flex align-items-center">
-
-            <!-- App Search-->
-            <form class="app-search d-none d-lg-block">
-                <div class="position-relative">
-                    <input type="text" class="form-control" placeholder="Search">
-                    <span class="bx bx-search-alt"></span>
-                </div>
-            </form>
-            <div class="dropdown d-inline-block d-lg-none ms-2">
-                <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-search-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class='bx bx-search-alt' ></i>
-                    </button>
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-search-dropdown">
-
-                    <form class="p-3">
-                        <div class="form-group m-0">
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search ..." aria-label="Recipient's username">
-                                <div class="input-group-append">
-                                    <button class="btn btn-primary h-100" type="submit"><i class='bx bx-search-alt' ></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="dropdown d-inline-block">
-                <button type="button" class="btn header-item" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="btn dropdown-toggle" id="header-lang-img">
-                            EN 
-                            <i class='bx bx-caret-down'></i>
-                        </span>
-                    </button>
-                <div class="dropdown-menu dropdown-menu-end">
-
-                    <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="en">
-                        <img src="./images/flags/us.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">English</span>
-                    </a>
-                    <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="sp">
-                        <img src="./images/flags/spain.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Spanish</span>
-                    </a>
-
-                    <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="gr">
-                        <img src="./images/flags/germany.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">German</span>
-                    </a>
-
-                    <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="it">
-                        <img src="./images/flags/italy.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Italian</span>
-                    </a>
-
-                    <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="ru">
-                        <img src="./images/flags/russia.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Russian</span>
-                    </a>
-                </div>
-            </div>
-            <!-- <div class="dropdown d-none d-lg-inline-block ms-1">
-                <button type="button" class="btn header-item noti-icon waves-effect" data-toggle="fullscreen">
-                        <i class="bx bx-fullscreen"></i>
-                    </button>
-            </div> -->
-            <div class="dropdown d-inline-block mt-12">
-                <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img class="rounded-circle header-profile-user" src="./images/profile/profile.png"
-                            alt="Header Avatar">
-                        <span class="pulse-css"></span>
-                        <span class="info d-xl-inline-block  color-span">
-                            <span class="d-block fs-20 font-w600">Randy Riley</span>
-                            <span class="d-block mt-7" >randy.riley@gmail.com</span>
-                        </span>
-                            
-                        <i class='bx bx-chevron-down'></i>
-                    </button>
-                <div class="dropdown-menu dropdown-menu-end">
-                    <!-- item-->
-                    <a class="dropdown-item" href="#"><i class="bx bx-user font-size-16 align-middle me-1"></i> <span>Profile</span></a>
-                    <a class="dropdown-item" href="#"><i class="bx bx-wallet font-size-16 align-middle me-1"></i> <span>My Wallet</span></a>
-                    <a class="dropdown-item d-block" href="#"><span class="badge bg-success float-end">11</span><i class="bx bx-wrench font-size-16 align-middle me-1"></i> <span>Settings</span></a>
-                    <a class="dropdown-item" href="#"><i class="bx bx-lock-open font-size-16 align-middle me-1"></i> <span>Lock screen</span></a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item text-danger" href="user-login.html"><i class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i> <span>Logout</span></a>
-                </div>
-            </div>
-        </div>
-    </div>
+    {% include 'components/mainheader.html' %}
     <!-- End Main Header -->
+    
     <!-- MAIN CONTENT -->
     <div class="main">
 
 
         <div class="main-content board">
-            <div class="row">
-                <div class="col-12">
-                    <div class="box card-box">
-                        <div class="icon-box bg-color-1">
-                            <div class="icon bg-icon-1">
-                                <i class="bx bxs-bell bx-tada"></i>
-                            </div>
-                            <div class="content">
-                                <h5 class="title-box">Notification</h5>
-                                <p class="color-1 mb-0 pt-4">5 Unread notification</p>
-                            </div>
-                        </div>
-                        <div class="icon-box bg-color-2">
-                            <div class="icon bg-icon-2">
-                                <i class='bx bxs-message-rounded'></i>
-                            </div>
-                            <div class="content click-c">
-                                <h5 class="title-box">Message</h5>
-                                <p class="color-2 mb-0 pt-4">5 Unread notification</p>
-                            </div>
-                            <div class="notification-list card">
-                                <div class="top box-header">
-                                    <h5>Notification</h5>
-
-                                </div>
-                                <div class="pd-1r">
-                                    <div class="divider"></div>
-                                </div>
-
-                                <div class="box-body">
-                                    <ul class="list">
-                                        <li class="d-flex no-seen">
-                                            <div class="img-mess"><img class="mr-14" src="./images/avatar/avt-1.png" alt="avt"></div>
-                                            <div class="info">
-                                                <a href="#" class="font-w600 mb-0 color-primary">Elizabeth Holland</a>
-                                                <p class="pb-0 mb-0 line-h14 mt-6">Proin ac quam et lectus vestibulum</p>
-                                            </div>
-                                        </li>
-
-                                        <li class="d-flex">
-                                            <div class="img-mess"><img class="mr-14" src="./images/avatar/avt-1.png" alt="avt"></div>
-                                            <div class="info">
-                                                <a href="#" class="font-w600 mb-0 color-primary">Elizabeth Holland</a>
-                                                <p class="pb-0 mb-0 line-h14 mt-6">Proin ac quam et lectus vestibulum</p>
-                                            </div>
-                                        </li>
-
-                                    </ul>
-                                    <div class="btn-view">
-                                        <a class="font-w600 h5" href="message.html">View All</a>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="icon-box bg-color-3">
-                            <a class="create d-flex" href="calendar.html">
-                                <div class="icon bg-icon-3">
-                                    <i class="bx bx-calendar"></i>
-                                </div>
-                                <div class="content">
-                                    <h5 class="title-box">Calendar</h5>
-                                    <p class="color-3 mb-0 pt-4">5 Unread notification</p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="icon-box bg-color-4">
-                            <a class="create d-flex" href="#" data-toggle="modal" data-target="#add_project">
-                                <div class="icon bg-white">
-                                    <i class="bx bx-plus"></i>
-                                </div>
-                                <div class="content d-flex align-items-center">
-                                    <h5 class="color-white">Create New Project</h5>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% include 'components/soubheader.html' %}
             <div class="row">
                 <div class="col-12">
                     <div class="box">
                         <div class="box-header">
-                            <h4 class="box-title">Here will be full project name</h4>
+                            <h4 class="box-title">{{data.nomP}}</h4>
                             <div class="box-right d-flex">
-                                <a class="btn" href="project-details.html">Project Details</a>
+                                <a class="btn" href="#">Project Details</a>
                                 <div class="icon-ratting">
                                     <i class='bx bxs-star'></i>
                                 </div>
@@ -364,8 +53,6 @@
                                         <i class='bx bx-dots-vertical-rounded fs-22'></i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_project"><i class="bx bx-trash"></i> Delete</a>
-                                        <a class="dropdown-item" href="#"><i class="bx bx-edit mr-5"></i>Edit</a>
                                     </div>
                                 </div>
                             </div>
@@ -375,21 +62,18 @@
                             <div class="team-name">
                                 <a href="#" class="team">
                                     <div class="icon"><i class="fas fa-tags"></i></div>
-                                    <h5>Team Name</h5>
+                                    <h5>{{data.nomEQ}}</h5>
                                 </a>
                             </div>
                             <div class="action">
-                                <a href="#" class="comment">32 Comments</a>
-                                <a href="#" class="edit">Edit</a>
-                                <a href="#" class="invite"><i class="fas fa-user-plus mr-5"></i>Invite People</a>
-                                <a href="#" class="add">New<i class="fas fa-caret-down pl-12"></i></a>
+                                <a href="#" class="comment">{{cmnttot.count}} Comments</a>
                             </div>
                             <ul class="user-list s2">
-                                <li><img src="./images/avatar/team-1.png" alt="user"></li>
-                                <li><img src="./images/avatar/team-2.png" alt="user"></li>
-                                <li><img src="./images/avatar/team-3.png" alt="user"></li>
-                                <li><img src="./images/avatar/team-4.png" alt="user"></li>
-                                <li><img src="./images/avatar/team-5.png" alt="user"></li>
+                                <li><img src="{{ url_for('static', filename='images/profile/profile.png')}}" alt="user"></li>
+                                <li><img src="{{ url_for('static', filename='images/profile/profile.png')}}" alt="user"></li>
+                                <li><img src="{{ url_for('static', filename='images/profile/profile.png')}}" alt="user"></li>
+                                <li><img src="{{ url_for('static', filename='images/profile/profile.png')}}" alt="user"></li>
+                                <li><img src="{{ url_for('static', filename='images/profile/profile.png')}}" alt="user"></li>
                                 <li class="total"><span>+4</span></li>
                             </ul>
                         </div>
@@ -401,18 +85,18 @@
                             <div class="kanban-cont">
                                 <div class="kanban-list kanban-list-to-do">
                                     <div class="kanban-header">
-                                        <h6 class="card-title">To-Do List</h6>
+                                        <h6 class="card-title">On hold</h6>
                                         <div class="dropdown">
                                             <a href="javascript:void(0);" class="btn-link" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <i class="fas fa-ellipsis-h"></i>
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-right">
-                                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_project"><i class="bx bx-trash"></i> Delete</a>
-                                                <a class="dropdown-item" href="#">Edit</a>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="kanban-wrap">
+                                        {% for item in tas %}
+                                        {% if item.status == 'On hold' %}
                                         <div class="panel">
                                             <div class="kanban-box item-box">
                                                 <div class="dropdown edit">
@@ -420,29 +104,29 @@
                                                         <i class="fas fa-pencil-alt"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_project"><i class="bx bx-trash"></i> Delete</a>
-                                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_card_modal"><i class="bx bx-edit mr-5"></i>Edit</a>
                                                     </div>
                                                 </div>
                                                 <div class="img-box">
-                                                    <img src="./images/to-do-list/project-1.png" alt="">
+                                                    <img src="{{ url_for('static', filename='images/to-do-list/project-1.png')}}" alt="">
                                                 </div>
                                                 <div class="content-box">
-                                                    <h6 class="title fs-16">Food Website hero area</h6>
+                                                    <h6 class="title fs-16">{{item.nomT}}</h6>
                                                     <div class="progress skill-progress mt-15 mb-15" style="height:7px;">
-                                                        <div class="progress-bar progress-animated" style="width: 78%; height:7px;" role="progressbar">
-                                                            <span class="sr-only">78% Complete</span>
+                                                        <div class="progress-bar progress-animated" style="width: {{item.etat}}%; height:7px;" role="progressbar">
+                                                            <span class="sr-only">{{item.etat}}% Complete</span>
                                                         </div>
                                                     </div>
                                                     <div class="d-flex justify-content-between">
                                                         <div class="link"><a href="#"><i class="fas fa-paperclip"></i></a></div>
                                                         <div class="time">
-                                                            <p class="font-main mb-0"><i class="far fa-clock"></i>Due in 5 days</p>
+                                                            <p class="font-main mb-0"><i class="far fa-clock"></i>Deadline : {{dateF}}</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        {% endif %}
+                                        {% endfor %}
                                     </div>
                                     <div class="btn-add-card">
                                         <a class="dropdown-item font-w500 fs-16" href="#" data-toggle="modal" data-target="#add_card_modal"><i class="fas fa-plus mr-14"></i>Add a card</a>
@@ -453,6 +137,8 @@
                                         <h6 class="card-title">In Progress</h6>
                                     </div>
                                     <div class="kanban-wrap">
+                                        {% for item in tas %}
+                                        {% if item.status == 'Dealy' %}
                                         <div class="panel">
                                             <div class="kanban-box item-box">
                                                 <div class="dropdown edit">
@@ -460,29 +146,41 @@
                                                         <i class="fas fa-pencil-alt"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_project"><i class="bx bx-trash"></i> Delete</a>
-                                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_card_modal"><i class="bx bx-edit mr-5"></i>Edit</a>
                                                     </div>
                                                 </div>
                                                 <div class="img-box">
-                                                    <img src="./images/to-do-list/project-2.png" alt="">
+                                                    <img src="{{ url_for('static', filename='images/to-do-list/project-1.png')}}" alt="">
                                                 </div>
                                                 <div class="content-box">
-                                                    <h6 class="title fs-16">Food Website hero area</h6>
+                                                    <h6 class="title fs-16">{{item.nomT}}</h6>
                                                     <div class="progress skill-progress mt-15 mb-15" style="height:7px;">
-                                                        <div class="progress-bar progress-animated" style="width: 78%; height:7px;" role="progressbar">
-                                                            <span class="sr-only">78% Complete</span>
+                                                        <div class="progress-bar progress-animated" style="width: {{item.etat}}%; height:7px;" role="progressbar">
+                                                            <span class="sr-only">{{item.etat}}% Complete</span>
                                                         </div>
                                                     </div>
                                                     <div class="d-flex justify-content-between">
                                                         <div class="link"><a href="#"><i class="fas fa-paperclip"></i></a></div>
                                                         <div class="time">
-                                                            <p class="font-main mb-0"><i class="far fa-clock"></i>Due in 5 days</p>
+                                                            <p class="font-main mb-0"><i class="far fa-clock"></i>Deadline : {{dateF}}</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <div class="btn-add-card">
+                                        <a class="dropdown-item font-w500 fs-16" href="#" data-toggle="modal" data-target="#add_card_modal"><i class="fas fa-plus mr-14"></i>Add a card</a>
+                                    </div>
+                                </div>
+                                <div class="kanban-list kanban-approved">
+                                    <div class="kanban-header">
+                                        <h6 class="card-title">Completed</h6>
+                                    </div>
+                                    <div class="kanban-wrap">
+                                        {% for item in tas %}
+                                        {% if item.status == 'Completed' %}
                                         <div class="panel">
                                             <div class="kanban-box item-box">
                                                 <div class="dropdown edit">
@@ -490,29 +188,29 @@
                                                         <i class="fas fa-pencil-alt"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_project"><i class="bx bx-trash"></i> Delete</a>
-                                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_card_modal"><i class="bx bx-edit mr-5"></i>Edit</a>
                                                     </div>
                                                 </div>
                                                 <div class="img-box">
-                                                    <img src="./images/to-do-list/project-3.png" alt="">
+                                                    <img src="{{ url_for('static', filename='images/to-do-list/project-1.png')}}" alt="">
                                                 </div>
                                                 <div class="content-box">
-                                                    <h6 class="title fs-16">Food Website hero area</h6>
+                                                    <h6 class="title fs-16">{{item.nomT}}</h6>
                                                     <div class="progress skill-progress mt-15 mb-15" style="height:7px;">
-                                                        <div class="progress-bar progress-animated" style="width: 78%; height:7px;" role="progressbar">
-                                                            <span class="sr-only">78% Complete</span>
+                                                        <div class="progress-bar progress-animated" style="width: {{item.etat}}%; height:7px;" role="progressbar">
+                                                            <span class="sr-only">{{item.etat}}% Complete</span>
                                                         </div>
                                                     </div>
                                                     <div class="d-flex justify-content-between">
                                                         <div class="link"><a href="#"><i class="fas fa-paperclip"></i></a></div>
                                                         <div class="time">
-                                                            <p class="font-main mb-0"><i class="far fa-clock"></i>Due in 5 days</p>
+                                                            <p class="font-main mb-0"><i class="far fa-clock"></i>Deadline : {{item.dateF.strftime("%d - %m - %Y")}}</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        {% endif %}
+                                        {% endfor %}
                                     </div>
                                     <div class="btn-add-card">
                                         <a class="dropdown-item font-w500 fs-16" href="#" data-toggle="modal" data-target="#add_card_modal"><i class="fas fa-plus mr-14"></i>Add a card</a>
@@ -523,6 +221,8 @@
                                         <h6 class="card-title">In Review</h6>
                                     </div>
                                     <div class="kanban-wrap">
+                                        {% for item in tas %}
+                                        {% if item.status == 'In Review' %}
                                         <div class="panel">
                                             <div class="kanban-box item-box">
                                                 <div class="dropdown edit">
@@ -530,29 +230,29 @@
                                                         <i class="fas fa-pencil-alt"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_project"><i class="bx bx-trash"></i> Delete</a>
-                                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_card_modal"><i class="bx bx-edit mr-5"></i>Edit</a>
                                                     </div>
                                                 </div>
                                                 <div class="img-box">
-                                                    <img src="./images/to-do-list/project-4.png" alt="">
+                                                    <img src="{{ url_for('static', filename='images/to-do-list/project-1.png')}}" alt="">
                                                 </div>
                                                 <div class="content-box">
-                                                    <h6 class="title fs-16">Food Website hero area</h6>
+                                                    <h6 class="title fs-16">{{item.nomT}}</h6>
                                                     <div class="progress skill-progress mt-15 mb-15" style="height:7px;">
-                                                        <div class="progress-bar progress-animated" style="width: 78%; height:7px;" role="progressbar">
-                                                            <span class="sr-only">78% Complete</span>
+                                                        <div class="progress-bar progress-animated" style="width: {{item.etat}}%; height:7px;" role="progressbar">
+                                                            <span class="sr-only">{{item.etat}}% Complete</span>
                                                         </div>
                                                     </div>
                                                     <div class="d-flex justify-content-between">
                                                         <div class="link"><a href="#"><i class="fas fa-paperclip"></i></a></div>
                                                         <div class="time">
-                                                            <p class="font-main mb-0"><i class="far fa-clock"></i>Due in 5 days</p>
+                                                            <p class="font-main mb-0"><i class="far fa-clock"></i>Deadline : {{dateF}}</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        {% endif %}
+                                        {% endfor %}
                                     </div>
                                     <div class="btn-add-card">
                                         <a class="dropdown-item font-w500 fs-16" href="#" data-toggle="modal" data-target="#add_card_modal"><i class="fas fa-plus mr-14"></i>Add a card</a>
@@ -563,6 +263,8 @@
                                         <h6 class="card-title">Approved</h6>
                                     </div>
                                     <div class="kanban-wrap">
+                                        {% for item in tas %}
+                                        {% if item.status == 'Approved' %}
                                         <div class="panel">
                                             <div class="kanban-box item-box">
                                                 <div class="dropdown edit">
@@ -570,35 +272,35 @@
                                                         <i class="fas fa-pencil-alt"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_project"><i class="bx bx-trash"></i> Delete</a>
-                                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_card_modal"><i class="bx bx-edit mr-5"></i>Edit</a>
                                                     </div>
                                                 </div>
                                                 <div class="img-box">
-                                                    <img src="./images/to-do-list/project-4.png" alt="">
+                                                    <img src="{{ url_for('static', filename='images/to-do-list/project-1.png')}}" alt="">
                                                 </div>
                                                 <div class="content-box">
-                                                    <h6 class="title fs-16">Food Website hero area</h6>
+                                                    <h6 class="title fs-16">{{item.nomT}}</h6>
                                                     <div class="progress skill-progress mt-15 mb-15" style="height:7px;">
-                                                        <div class="progress-bar progress-animated" style="width: 78%; height:7px;" role="progressbar">
-                                                            <span class="sr-only">78% Complete</span>
+                                                        <div class="progress-bar progress-animated" style="width: {{item.etat}}%; height:7px;" role="progressbar">
+                                                            <span class="sr-only">{{item.etat}}% Complete</span>
                                                         </div>
                                                     </div>
                                                     <div class="d-flex justify-content-between">
                                                         <div class="link"><a href="#"><i class="fas fa-paperclip"></i></a></div>
                                                         <div class="time">
-                                                            <p class="font-main mb-0"><i class="far fa-clock"></i>Due in 5 days</p>
+                                                            <p class="font-main mb-0"><i class="far fa-clock"></i>Deadline : {{dateF}}</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        {% endif %}
+                                        {% endfor %}
                                     </div>
                                     <div class="btn-add-card">
                                         <a class="dropdown-item font-w500 fs-16" href="#" data-toggle="modal" data-target="#add_card_modal"><i class="fas fa-plus mr-14"></i>Add a card</a>
                                     </div>
                                 </div>
-
+                                
                             </div>
                         </div>
                     </div>
@@ -747,38 +449,102 @@
                     </div>
                 </div>
             </div>
-
             <div id="add_card_modal" class="modal custom-modal fade" role="dialog">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title">Add Card</h4>
+                            <h4 class="modal-title">Add Task</h4>
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </div>
                         <div class="modal-body">
-                            <form>
+                            <form action="/task/add/{{data.projet_id}}" method="post" role="contentinfo">
                                 <div class="form-group">
-                                    <label>Image Card</label>
-                                    <input class="form-control" type="file">
+                                    <label>Task Name</label>
+                                    <input type="text" class="form-control" name="taskName" value="">
+                                </div>
+                                <div class="form-group"> 
+                                    <label class="form-label">Select Priority:</label> 
+                                    <select name="taskPriority" class="form-control custom-select select2 select2-hidden-accessible" data-placeholder="Select Priority" tabindex="-1" aria-hidden="true"
+                                            data-select2-id="select2-data-16-akyu">
+                                        <option label="Select Priority" data-select2-id="select2-data-18-ezae"></option> 
+                                        <option value="High">High</option> 
+                                        <option value="Medium">Medium</option> 
+                                        <option value="Low">Low</option> 
+                                    </select>
+                                    <span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="select2-data-17-6y8j" style="width: 100%;">
+                                        <span class="selection">
+                                            <span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-attendance-ws-container" aria-controls="select2-attendance-ws-container"><span class="select2-selection__rendered" id="select2-attendance-ws-container" role="textbox" aria-readonly="true" title="Select Priority"></span>
+                                                <span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span>
+                                            </span>
+                                        </span>
+                                        <span class="dropdown-wrapper" aria-hidden="true"></span>
+                                    </span>
                                 </div>
                                 <div class="form-group">
-                                    <label>Card Name</label>
-                                    <input type="text" class="form-control" value="">
-                                </div>
-                                <div class="form-group">
-                                    <label>Due Date</label>
-                                    <div class="cal-icon">
-                                        <input class="form-control " type="date" value="">
+                                    <label class="form-label">Start Date:</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text"><i class='bx bx-calendar'></i></div>
+                                        </div>
+                                        <input class="form-control" name="dateStart" type="date" value=""> 
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label class="form-label">Deadline:</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text"><i class='bx bx-calendar'></i></div>
+                                        </div>
+                                        <input class="form-control" name="dateFinish" type="date" value=""> 
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Progress:</label>
+                                    <div class="input-group">
+                                        <input type="range" name="taskEtat" class="form-range" value="0" min="0" max="100" oninput='this.nextElementSibling.value = this.value + "%"'>
+                                        <output class="ml-5">0%</output>
+                                    </div>
+                                </div>
+                                <div class="form-group"> 
+                                    <label class="form-label">Select Work Status:</label> 
+                                    <select name="taskStatus" class="form-control custom-select select2 select2-hidden-accessible" data-placeholder="Select Priority" tabindex="-1" aria-hidden="true"
+                                            data-select2-id="select2-data-16-akyu">
+                                        <option label="Select Work Status" data-select2-id="select2-data-18-ezae"></option> 
+                                        <option value="Dealy">Dealy</option> 
+                                        <option value="On hold">On hold</option> 
+                                        <option value="In Review">In Review</option> 
+                                        <option value="Completed">Completed</option> 
+                                        <option value="Approved">Approved</option> 
+                                    </select>
+                                <span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="select2-data-17-6y8j" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-attendance-ws-container" aria-controls="select2-attendance-ws-container"><span class="select2-selection__rendered" id="select2-attendance-ws-container" role="textbox" aria-readonly="true" title="Select Priority"></span>
+                                <span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span>
+                                </span>
+                                </span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                                </div>
+                                <div class="form-group"> 
+                                    <label class="form-label">Select Employee:</label> 
+                                    <select name="emp_id" class="form-control custom-select select2 select2-hidden-accessible" data-placeholder="Select Employee" tabindex="-1" aria-hidden="true"
+                                            data-select2-id="select2-data-16-akyu">
+                                        <option label="Select Employee" data-select2-id="select2-data-18-ezae"></option> 
+                                        {% for emp in emps %}
+                                        <option value="{{emp.emp_id}}">{{emp.fullName}}</option> 
+                                        {% endfor %}
+                                    </select>
+                                <span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="select2-data-17-6y8j" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-attendance-ws-container" aria-controls="select2-attendance-ws-container"><span class="select2-selection__rendered" id="select2-attendance-ws-container" role="textbox" aria-readonly="true" title="Select Priority"></span>
+                                <span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span>
+                                </span>
+                                </span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                                </div>
                                 <div class="submit-section text-center">
-                                    <button class="btn btn-primary submit-btn">Submit</button>
+                                    <button class="btn btn-primary submit-btn" type="submit">Submit</button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
+
+            
         </div>
     </div>
     <!-- END MAIN CONTENT -->
@@ -788,21 +554,22 @@
     <!-- SCRIPT -->
     <!-- APEX CHART -->
 
-    <script src="./libs/jquery/jquery.min.js"></script>
-    <script src="./libs/jquery/jquery-ui.min.js"></script>
-    <script src="./libs/moment/min/moment.min.js"></script>
-    <script src="./libs/apexcharts/apexcharts.js"></script>
-    <script src="./libs/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="./libs/peity/jquery.peity.min.js"></script>
-    <script src="./libs/chart.js/Chart.bundle.min.js"></script>
-    <script src="./libs/owl.carousel/owl.carousel.min.js"></script>
-    <script src="./libs/bootstrap/js/bootstrap.min.js"></script>
-    <script src="./libs/simplebar/simplebar.min.js"></script>
+    
+    <script src="{{ url_for('static', filename='libs/jquery/jquery.min.js')}}"></script>
+    <script src="{{ url_for('static', filename='libs/jquery/jquery-ui.min.js')}}"></script>
+    <script src="{{ url_for('static', filename='libs/moment/min/moment.min.js')}}"></script>
+    <script src="{{ url_for('static', filename='libs/apexcharts/apexcharts.js')}}"></script>
+    <script src="{{ url_for('static', filename='libs/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{ url_for('static', filename='libs/peity/jquery.peity.min.js')}}"></script>
+    <script src="{{ url_for('static', filename='libs/chart.js/Chart.bundle.min.js')}}"></script>
+    <script src="{{ url_for('static', filename='libs/owl.carousel/owl.carousel.min.js')}}"></script>
+    <script src="{{ url_for('static', filename='libs/bootstrap/js/bootstrap.min.js')}}"></script>
+    <script src="{{ url_for('static', filename='libs/simplebar/simplebar.min.js')}}"></script>
 
     <!-- APP JS -->
-    <script src="./js/main.js"></script>
-    <script src="./js/shortcode.js"></script>
-    <script src="./js/script.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js')}}"></script>
+    <script src="{{ url_for('static', filename='js/shortcode.js')}}"></script>
+    <script src="{{ url_for('static', filename='js/script.js')}}"></script>
 </body>
 
 </html>

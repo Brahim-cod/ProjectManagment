@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        Protend - Project Management Admin Dashboard HTML Template
+        IMANAGE - Project Management
     </title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.png')}}" type="image/png">
     <!-- GOOGLE FONT -->
@@ -24,6 +24,15 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/grid.css')}}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css')}}">
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#task-profile').DataTable();
+        });
+    </script>
 </head>
 
 <body class="sidebar-expand counter-scroll">
@@ -142,7 +151,7 @@
                                                 <div class="task-btn bg-danger-1 text-danger btn-link fs-14" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Project Priority">High</div> <a class="btn btn-outline-light  text-muted pd-0 fs-34" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class='bx bx-dots-vertical-rounded' ></i></a>
                                                 <ul class="dropdown-menu " role="menu">
                                                     <li><a href="/project-details/{{item.projet_id}}"><i class="far fa-eye"></i>View</a></li>
-                                                    <li><a href="#"><i class='bx bx-plus-circle' ></i>Add Task</a></li>
+                                                    <li><a href="/board/{{item.projet_id}}"><i class='bx bx-plus-circle' ></i>Add Task</a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -224,77 +233,22 @@
                         </div>
                         <div class="box-body pb-0">
                             <ul class="message mb-2">
+                                {% for item in tas %}
                                 <li class="dlab-chat-user">
                                     <div class="d-flex bd-highlight">
                                         <div class="img_cont">
-                                            <img src="{{ url_for('static', filename='images/avatar/message-01.png')}}" class="rounded-circle user_img" alt="" />
-                                        </div>
+                                            <img src="{{ url_for('static', filename='images/profile/profile.png')}}" class="rounded-circle user_img" alt="" />
+                                        </div>  
                                         <div class="user_info">
-                                            <a class="fs-15 font-w500 mt-5 mb-5" href="message.html">Lucinda Massey</a>
-                                            <p class="fs-13 mb-0">2 Hour ago</p>
+                                            <a class="fs-15 font-w500 mt-5 mb-5" href="#">{{item.fullName}}</a>
+                                            <p class="fs-13 mb-0">Deadline : {{item.dateF}}</p>
                                         </div>
                                     </div>
                                     <div class="card-options me-0 d-flex align-items-center">
                                         <a href="#" class="text-primary fs-14">Add New Task</a>
                                     </div>
                                 </li>
-                                <li class="dlab-chat-user">
-                                    <div class="d-flex bd-highlight">
-                                        <div class="img_cont border-pink">
-                                            <img src="{{ url_for('static', filename='images/avatar/message-02.png')}}" class="rounded-circle user_img" alt="" />
-                                        </div>
-                                        <div class="user_info">
-                                            <a class="fs-15 font-w500 mt-5 mb-5" href="message.html">Ryan Nolan</a>
-                                            <p class="fs-13 mb-0">25 Min ago</p>
-                                        </div>
-                                    </div>
-                                    <div class="card-options me-0 d-flex align-items-center">
-                                        <a href="#" class="text-success fs-14">Review Completed</a>
-                                    </div>
-                                </li>
-                                <li class="dlab-chat-user">
-                                    <div class="d-flex bd-highlight">
-                                        <div class="img_cont border-green">
-                                            <img src="{{ url_for('static', filename='images/avatar/message-03.png')}}" class="rounded-circle user_img" alt="" />
-                                        </div>
-                                        <div class="user_info">
-                                            <a class="fs-15 font-w500 mt-5 mb-5" href="message.html">Lucinda Massey</a>
-                                            <p class="fs-13 mb-0">2 Hour ago</p>
-                                        </div>
-                                    </div>
-                                    <div class="card-options me-0 d-flex align-items-center">
-                                        <a href="#" class="text-completed fs-14">Task Completed</a>
-                                    </div>
-                                </li>
-
-                                <li class="dlab-chat-user">
-                                    <div class="d-flex bd-highlight">
-                                        <div class="img_cont border-pink">
-                                            <img src="{{ url_for('static', filename='images/avatar/message-02.png')}}" class="rounded-circle user_img" alt="" />
-                                        </div>
-                                        <div class="user_info">
-                                            <a class="fs-15 font-w500 mt-5 mb-5" href="message.html">Ryan Nolan</a>
-                                            <p class="fs-13 mb-0">25 Min ago</p>
-                                        </div>
-                                    </div>
-                                    <div class="card-options me-0 d-flex align-items-center">
-                                        <a href="#" class="text-success fs-14">Review Completed</a>
-                                    </div>
-                                </li>
-                                <li class="dlab-chat-user">
-                                    <div class="d-flex bd-highlight">
-                                        <div class="img_cont">
-                                            <img src="{{ url_for('static', filename='images/avatar/message-01.png')}}" class="rounded-circle user_img" alt="" />
-                                        </div>
-                                        <div class="user_info">
-                                            <a class="fs-15 font-w500 mt-5 mb-5" href="message.html">Lucinda Massey</a>
-                                            <p class="fs-13 mb-0">2 Hour ago</p>
-                                        </div>
-                                    </div>
-                                    <div class="card-options me-0 d-flex align-items-center">
-                                        <a href="#" class="text-primary fs-14">Add New Task</a>
-                                    </div>
-                                </li>
+                                {% endfor %}
                             </ul>
                         </div>
                     </div>
@@ -317,6 +271,7 @@
                             </div>
                         </div>
                         <div class="box-body pb-0">
+                            {% for item in tots %}
                             <div class="project-progress-content mt-21 mb-26">
                                 <div class="list-group-item d-sm-flex  align-items-center border-0 pd-0">
                                     <div class="d-flex w-10">
@@ -324,12 +279,12 @@
 
                                     </div>
                                     <div class="w-90 mt-4 mt-md-0 pl-13">
-                                        <p class="fs-16 font-w500 ms-auto mb-13">Software Architecture Design</p>
+                                        <p class="fs-16 font-w500 ms-auto mb-13">{{item.nomP}}</p>
                                         <div class="progress progress-sm w-100">
-                                            <div class="progress-bar bg-green-1 w-90"></div>
+                                            <div class="progress-bar bg-green-1 w-{{"{:.0f}".format(item.CompletedCount/item.total*100) if (item.CompletedCount/item.total*100)%10 == 0 else "{:.0f}".format((item.CompletedCount/item.total*100) - (item.CompletedCount/item.total*100)%10 + 10)}}"></div>
                                         </div>
                                         <div class="d-flex justify-content-between mt-17">
-                                            <div class="deadline fs-14 font-w500 me-auto d-flex align-items-center"><i class='bx bxs-time-five fs-20 mr-9'></i>Deadline : in 3 days</div>
+                                            <div class="deadline fs-14 font-w500 me-auto d-flex align-items-center"><i class='bx bxs-time-five fs-20 mr-9'></i>Deadline : {{item.datefin}}</div>
                                             <ul class="user-list mb-0">
                                                 <li><img src="{{ url_for('static', filename='images/avatar/user-1.png')}}" alt="user"></li>
                                                 <li><img src="{{ url_for('static', filename='images/avatar/user-2.png')}}" alt="user"></li>
@@ -339,50 +294,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="project-progress-content mt-0 mb-26">
-                                <div class="list-group-item d-sm-flex  align-items-center border-0 pd-0">
-                                    <div class="d-flex w-10">
-                                        <div class="task-img bg-primary-transparent"> <img src="{{ url_for('static', filename='images/icon/html-2.png')}}" alt="img" class=""> </div>
-
-                                    </div>
-                                    <div class="w-90 mt-4 mt-md-0 pl-13">
-                                        <p class="fs-16 font-w500 ms-auto mb-13">Web Development</p>
-                                        <div class="progress progress-sm w-100">
-                                            <div class="progress-bar bg-primary-1 w-90"></div>
-                                        </div>
-                                        <div class="d-flex justify-content-between mt-17">
-                                            <div class="deadline fs-14 font-w500 me-auto d-flex align-items-center"><i class='bx bxs-time-five fs-20 mr-9'></i>Deadline : in 3 days</div>
-                                            <ul class="user-list mb-0">
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-1.png')}}" alt="user"></li>
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-2.png')}}" alt="user"></li>
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-3.png')}}" alt="user"></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="project-progress-content mt-0">
-                                <div class="list-group-item d-sm-flex  align-items-center border-0 pd-0">
-                                    <div class="d-flex w-10">
-                                        <div class="task-img bg-primary-transparent"> <img src="{{ url_for('static', filename='images/icon/html-2.png')}}" alt="img" class=""> </div>
-
-                                    </div>
-                                    <div class="w-90 mt-4 mt-md-0 pl-13">
-                                        <p class="fs-16 font-w500 ms-auto mb-13">Mobile App Development</p>
-                                        <div class="progress progress-sm w-100">
-                                            <div class="progress-bar bg-danger w-90"></div>
-                                        </div>
-                                        <div class="d-flex justify-content-between mt-17">
-                                            <div class="deadline fs-14 font-w500 me-auto d-flex align-items-center"><i class='bx bxs-time-five fs-20 mr-9'></i>Deadline : in 3 days</div>
-                                            <ul class="user-list mb-0">
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-1.png')}}" alt="user"></li>
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-2.png')}}" alt="user"></li>
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-3.png')}}" alt="user"></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -404,250 +316,36 @@
                             </div>
                         </div>
                         <div class="box-body pb-0 table-responsive activity mt-18">
-                            <table class="table table-vcenter text-nowrap table-bordered dataTable no-footer mw-100" id="task-profile" role="grid">
+                            <table class="table table-vcenter text-nowrap table-bordered dataTable no-footer" id="task-profile" role="grid">
                                 <thead>
                                     <tr class="top">
-                                        <th class="border-bottom-0 sorting fs-14 font-w500" tabindex="0" aria-controls="task-profile" rowspan="1" colspan="1" style="width: 222.312px;">Project</th>
-                                        <th class="border-bottom-0 sorting fs-14 font-w500" tabindex="0" aria-controls="task-profile" rowspan="1" colspan="1" style="width: 84.8281px;">Team</th>
-                                        <th class="border-bottom-0 sorting fs-14 font-w500" tabindex="0" aria-controls="task-profile" rowspan="1" colspan="1" style="width: 87.9844px;">Start</th>
+                                        <th class="border-bottom-0 text-center sorting fs-14 font-w500" tabindex="0" aria-controls="task-profile" rowspan="1" colspan="1" style="width: 26.6562px;">No</th>
+                                        <th class="border-bottom-0 sorting fs-14 font-w500" tabindex="0" aria-controls="task-profile" rowspan="1" colspan="1" style="width: 222.312px;">Task</th>
+                                        <th class="border-bottom-0 sorting fs-14 font-w500" tabindex="0" aria-controls="task-profile" rowspan="1" colspan="1" style="width: 84.8281px;">Priority</th>
+                                        <th class="border-bottom-0 sorting fs-14 font-w500" tabindex="0" aria-controls="task-profile" rowspan="1" colspan="1" style="width: 87.9844px;">Start Date</th>
                                         <th class="border-bottom-0 sorting fs-14 font-w500" tabindex="0" aria-controls="task-profile" rowspan="1" colspan="1" style="width: 87.9844px;">Deadline</th>
                                         <th class="border-bottom-0 sorting fs-14 font-w500" tabindex="0" aria-controls="task-profile" rowspan="1" colspan="1" style="width: 71.875px;">Progress</th>
                                         <th class="border-bottom-0 sorting fs-14 font-w500" tabindex="0" aria-controls="task-profile" rowspan="1" colspan="1" style="width: 110.719px;">Work Status</th>
-                                        <th class="border-bottom-0 sorting_disabled fs-14 font-w500" rowspan="1" colspan="1" style="width: 145.391px;">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr class="odd">
-                                        <td>
-                                            <a href="#" class="d-flex "> <span>Design Updated</span> </a>
-                                        </td>
-                                        <td>
-                                            <ul class="user-list mb-0">
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-1.png')}}" alt="user"></li>
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-2.png')}}" alt="user"></li>
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-3.png')}}" alt="user"></li>
-                                            </ul>
-                                        </td>
-                                        <td>12-02-2021</td>
-                                        <td>16-06-2021</td>
-                                        <td>
-                                            <div class="progress progress-sm">
-                                                <div class="progress-bar bg-primary w-30"></div>
-                                            </div>
-                                        </td>
-                                        <td><span class="badge badge-warning">On hold</span></td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0);" class="btn-link" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class='bx bx-dots-horizontal-rounded'></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_client"><i class="bx bx-trash"></i> Delete</a>
-                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_client"><i class="bx bx-edit mr-5"></i>Edit</a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    {% for item in tas %}
                                     <tr class="even">
+                                        <td class="text-center">{{item.tache_id}}</td>
                                         <td>
-                                            <a href="#" class="d-flex "> <span>Website Develop</span> </a>
+                                            <a href="/project-details/{{item.projet_id}}" class="d-flex "> <span>{{item.nomT}}</span> </a>
                                         </td>
-                                        <td>
-                                            <ul class="user-list mb-0">
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-1.png')}}" alt="user"></li>
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-2.png')}}" alt="user"></li>
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-3.png')}}" alt="user"></li>
-                                            </ul>
-                                        </td>
-                                        <td>01-01-2021</td>
-                                        <td>22-04-2021</td>
+                                        <td><span class="badge {{'badge-danger-light' if item.priority == 'High' else 'badge-success-light' if item.priority == 'Low' else  'badge-warning-light'}}">{{item.priority}}</span></td>
+                                        <td>{{item.dateD.strftime("%d-%m-%Y")}}</td>
+                                        <td>{{item.dateF.strftime("%d-%m-%Y")}}</td>
                                         <td>
                                             <div class="progress progress-sm">
-                                                <div class="progress-bar bg-yellow w-50"></div>
+                                                <div class="progress-bar bg-primary w-{{item.etat if item.etat%10 == 0 else item.etat - item.etat%10 + 10}}"></div>
                                             </div>
                                         </td>
-                                        <td>
-                                            <div class="d-flex"> <span class="badge badge-danger">Dealy</span>
-                                                <div class="mt-1 ms-1"> <span class="feather feather-info text-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Dealy by 99 days"></span> </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0);" class="btn-link" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class='bx bx-dots-horizontal-rounded'></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_client"><i class="bx bx-trash"></i> Delete</a>
-                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_client"><i class="bx bx-edit mr-5"></i>Edit</a>
-                                                </div>
-                                            </div>
-                                        </td>
+                                        <td><span class="badge {{'badge-danger-light' if item.status == 'Dealy' else 'badge-warning-light' if item.status == 'On hold' else  'badge-success-light'}}">{{item.status}}</span></td>
                                     </tr>
-                                    <tr class="odd">
-
-                                        <td>
-                                            <a href="#" class="d-flex "><span>Digital Marketing</span> </a>
-                                        </td>
-                                        <td>
-                                            <ul class="user-list mb-0">
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-1.png')}}" alt="user"></li>
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-2.png')}}" alt="user"></li>
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-3.png')}}" alt="user"></li>
-                                            </ul>
-                                        </td>
-                                        <td>11-04-2021</td>
-                                        <td>16-06-2021</td>
-                                        <td>
-                                            <div class="progress progress-sm">
-                                                <div class="progress-bar bg-primary w-100"></div>
-                                            </div>
-                                        </td>
-                                        <td> <span class="badge badge-success">Complete</span> </td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0);" class="btn-link" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class='bx bx-dots-horizontal-rounded'></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_client"><i class="bx bx-trash"></i> Delete</a>
-                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_client"><i class="bx bx-edit mr-5"></i>Edit</a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="even">
-
-                                        <td>
-                                            <a href="#" class="d-flex "><span>Ad Analysis</span> </a>
-                                        </td>
-                                        <td>
-                                            <ul class="user-list mb-0">
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-1.png')}}" alt="user"></li>
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-2.png')}}" alt="user"></li>
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-3.png')}}" alt="user"></li>
-                                            </ul>
-                                        </td>
-                                        <td>11-03-2021</td>
-                                        <td>19-05-2021</td>
-                                        <td>
-                                            <div class="progress progress-sm">
-                                                <div class="progress-bar bg-primary w-80"></div>
-                                            </div>
-                                        </td>
-                                        <td> <span class="badge badge-success">Complete</span> </td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0);" class="btn-link" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class='bx bx-dots-horizontal-rounded'></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_client"><i class="bx bx-trash"></i> Delete</a>
-                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_client"><i class="bx bx-edit mr-5"></i>Edit</a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="odd">
-
-                                        <td>
-                                            <a href="#" class="d-flex "><span>Design update</span> </a>
-                                        </td>
-                                        <td>
-                                            <ul class="user-list mb-0">
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-1.png')}}" alt="user"></li>
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-2.png')}}" alt="user"></li>
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-3.png')}}" alt="user"></li>
-                                            </ul>
-                                        </td>
-                                        <td>05-02-2021</td>
-                                        <td>21-04-2021</td>
-                                        <td>
-                                            <div class="progress progress-sm">
-                                                <div class="progress-bar bg-primary w-70"></div>
-                                            </div>
-                                        </td>
-                                        <td> <span class="badge badge-success">Complete</span> </td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0);" class="btn-link" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class='bx bx-dots-horizontal-rounded'></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_client"><i class="bx bx-trash"></i> Delete</a>
-                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_client"><i class="bx bx-edit mr-5"></i>Edit</a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="even">
-
-                                        <td>
-                                            <a href="#" class="d-flex "><span>Design update</span> </a>
-                                        </td>
-                                        <td>
-                                            <ul class="user-list mb-0">
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-1.png')}}" alt="user"></li>
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-2.png')}}" alt="user"></li>
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-3.png')}}" alt="user"></li>
-                                            </ul>
-                                        </td>
-                                        <td>21-01-2021</td>
-                                        <td>15-03-2021</td>
-                                        <td>
-                                            <div class="progress progress-sm">
-                                                <div class="progress-bar bg-primary w-40"></div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="d-flex"> <span class="badge badge-success">Complete</span>
-                                                <div class="mt-1 ms-1"> <span class="feather feather-info text-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Dealy by 30 days"></span> </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0);" class="btn-link" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class='bx bx-dots-horizontal-rounded'></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_client"><i class="bx bx-trash"></i> Delete</a>
-                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_client"><i class="bx bx-edit mr-5"></i>Edit</a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr class="odd">
-
-                                        <td>
-                                            <a href="#" class="d-flex "><span>Design update</span> </a>
-                                        </td>
-                                        <td>
-                                            <ul class="user-list mb-0">
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-1.png')}}" alt="user"></li>
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-2.png')}}" alt="user"></li>
-                                                <li><img src="{{ url_for('static', filename='images/avatar/user-3.png')}}" alt="user"></li>
-                                            </ul>
-                                        </td>
-                                        <td>23-01-2021</td>
-                                        <td>25-02-2021</td>
-                                        <td>
-                                            <div class="progress progress-sm">
-                                                <div class="progress-bar bg-yellow w-40"></div>
-                                            </div>
-                                        </td>
-                                        <td> <span class="badge badge-success">Complete</span> </td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <a href="javascript:void(0);" class="btn-link" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class='bx bx-dots-horizontal-rounded'></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_client"><i class="bx bx-trash"></i> Delete</a>
-                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_client"><i class="bx bx-edit mr-5"></i>Edit</a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-
+                                {% endfor %}
                                 </tbody>
                             </table>
                         </div>

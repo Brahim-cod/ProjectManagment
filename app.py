@@ -1,5 +1,6 @@
 from asyncio import tasks
 from ntpath import join
+from select import select
 from turtle import title
 from flask import Flask, flash, jsonify, redirect, render_template, request, session, url_for
 from flask_mysqldb import MySQL
@@ -32,6 +33,12 @@ def home():
 
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
+    cursor.execute('SELECT d.cat_name, COUNT(e.projet_id) as count, d.color FROM projet e INNER JOIN categorie d ON e.cat_id=d.cat_id GROUP BY e.cat_id')
+    cats = cursor.fetchone()
+
+    cursor.execute('SELECT COUNT(*) as count FROM projet')
+    totproj = cursor.fetchone()
+
     cursor.execute('''SELECT  t.projet_id,
                               nomP as name,
                               count(*) AS total,
@@ -41,13 +48,15 @@ def home():
                       GROUP BY t.projet_id''')
     tots = cursor.fetchall()
 
-    cursor.execute('''SELECT  
-                              count(*) AS total,
-                              sum(case when status = 'Completed' then 1 else 0 end) AS CompletedCount,
-                              sum(case when status <> 'Completed' then 1 else 0 end) AS UncompletedCount
+    cursor.execute('''SELECT
+                            count(*) AS total,
+                            sum(case when status = 'Completed' then 1 else 0 end) AS CompletedCount,
+                            sum(case when status <> 'Completed' then 1 else 0 end) AS UncompletedCount
                       FROM tache''')
     taskstot = cursor.fetchone()
-    return render_template('index.html', title = "Dashboard", tots = tots, taskstot = taskstot)
+    
+
+    return render_template('index.html', title = "Dashboard", cats = cats, totproj = totproj ,tots = tots, taskstot = taskstot)
 
 
 @app.route('/chat')
@@ -118,6 +127,8 @@ def modifProject(id):
 def Team():
     if not 'loggedin' in session:
         return redirect(url_for('Login'))
+    if session['ischef'] == False:
+        return redirect(url_for('userProfile'))
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute('Select emp_id, fullName, dpt_name from emp e, departement d Where d.dpt_id = e.dpt_id and emp_id not in (select emp_id from emp_equipe where equipe_id not in (select equipe_id from projet where datefin < CURDATE())) and emp_id not in (select chef_id from chef_projet)')
     emps = cursor.fetchall()
@@ -169,6 +180,29 @@ def taskUpdate(id):
         return redirect(url_for('userProfile'))
     return redirect(url_for('home'))
 
+@app.route('/task/add/<int:id>', methods=['GET', 'POST'])
+def taskAdd(id):
+    if not 'loggedin' in session:
+        return redirect(url_for('Login'))
+    url = "/board/%s" % (id)
+    if request.method == 'POST' and 'taskName' in request.form and 'taskPriority' in request.form and 'dateStart' in request.form and 'dateFinish' in request.form and 'taskEtat' in request.form and 'taskStatus' in request.form:
+        # Create variables for easy access
+        name = request.form['taskName']
+        finish = request.form['dateFinish']
+        start = request.form['dateStart']
+        etat = request.form['taskEtat']
+        priority = request.form['taskPriority']
+        status = request.form['taskStatus']
+        emp_id = request.form['emp_id']
+        if status == 'Completed' or status == 'In Review' or status == 'Approved':
+            etat = 100
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('''INSERT INTO tache
+                        (nomT, dateF, DateD, etat, priority, status, projet_id, emp_id) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)''', (name, finish, start, etat, priority, status, id, emp_id,))
+        mysql.connection.commit()
+        return redirect(url)
+    return redirect(url)
+
 @app.route('/task/delete/<int:id>')
 def taskDelete(id):
     if not 'loggedin' in session:
@@ -181,6 +215,10 @@ def taskDelete(id):
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    if not 'loggedin' in session:
+        return redirect(url_for('Login'))
+    if session['ischef'] == False:
+        return redirect(url_for('userProfile'))
     # Output message if something goes wrong...
     msg = ''
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -386,12 +424,12 @@ def Projects():
     cursor.execute("SELECT COUNT(*) as count FROM projet WHERE status = 'Completed'")
     cm = cursor.fetchone()
 
-    cursor.execute('''SELECT projet_id,
+    cursor.execute('''SELECT t.projet_id,nomP,datefin,
                             count(*) AS total,
-                            sum(case when status = 'Completed' then 1 else 0 end) AS CompletedCount,
-                            sum(case when status <> 'Completed' then 1 else 0 end) AS UncompletedCount
-                      FROM tache
-                    GROUP BY projet_id''')
+                            sum(case when t.status = 'Completed' then 1 else 0 end) AS CompletedCount,
+                            sum(case when t.status <> 'Completed' then 1 else 0 end) AS UncompletedCount
+                      FROM tache t INNER JOIN projet p ON t.projet_id = p.projet_id
+                    GROUP BY t.projet_id''')
     tots = cursor.fetchall()
 
     cursor.execute('SELECT d.dpt_name, COUNT(e.dpt_id) as count, d.color FROM emp e INNER JOIN departement d ON e.dpt_id=d.dpt_id GROUP BY e.dpt_id')
@@ -399,7 +437,13 @@ def Projects():
 
     cursor.execute('SELECT COUNT(*) as count FROM emp')
     dptcount = cursor.fetchone()
-    return render_template('project.html', title="Projects", projets = projets, onp = onp, pd = pd, cm = cm, pjTotal = len(projets), tots = tots, emps = emps, dptcount = dptcount)
+
+    cursor.execute('SELECT tache_id, nomT, priority, dateD, dateF, etat, t.status, projet_id, fullName FROM tache t inner join emp e on t.emp_id = e.emp_id WHERE DATE(dateD) = CURDATE() ORDER BY dateD')
+    tas = cursor.fetchall()
+
+
+
+    return render_template('project.html', title="Projects", projets = projets, onp = onp, pd = pd, cm = cm, pjTotal = len(projets), tots = tots, emps = emps, dptcount = dptcount, tas = tas)
 
 @app.route('/project-details/<int:id>', methods=['GET', 'POST'])
 def projectdetails(id):
@@ -421,6 +465,28 @@ def projectdetails(id):
     cursor.execute('SELECT cmt_text, fullName FROM comment c INNER JOIN emp e ON c.emp_id = e.emp_id WHERE projet_id = %s ORDER BY cmnt_date', (id,))
     cmnts = cursor.fetchall()
     return render_template('project-details.html', title = "Project Details", data = projet, cats = cat, teams = teams, cmnts = cmnts, cmnttot = len(cmnts))
+
+@app.route('/board/<int:id>')
+def board(id):
+    if not 'loggedin' in session:
+        return redirect(url_for('Login'))
+    if session['ischef'] == False:
+        return redirect(url_for('userProfile'))
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('SELECT projet_id, nomP, nomEQ, descriptionP, cat_id, p.equipe_id, datefin, datedebut FROM projet p inner join equipe e on e.equipe_id = p.equipe_id WHERE projet_id = %s', (id,))
+    projet = cursor.fetchone()
+    if projet is None:
+        return render_template('404.html')
+    cursor.execute('Select * FROM tache where projet_id = %s',(id,))
+    tas = cursor.fetchall()
+
+    cursor.execute('SELECT COUNT(*) as count FROM comment WHERE projet_id = %s', (id,))
+    cmnttot = cursor.fetchone()
+
+    cursor.execute('SELECT * FROM emp WHERE emp_id IN (SELECT emp_id FROM emp_equipe WHERE equipe_id IN (SELECT equipe_id FROM projet WHERE projet_id = %s))',(id,))
+    emps = cursor.fetchall()
+    return render_template('board.html', title = "Board",tas = tas, data = projet, cmnttot = cmnttot, emps = emps)
+
 
 @app.route('/project-comment/<int:id>', methods=['GET', 'POST'])
 def Comment(id):

@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Protend - Project Management Admin Dashboard HTML Template</title>
+    <title>        IMANAGE - Project Management
+    </title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.png')}}" type="image/png">
     <!-- GOOGLE FONT -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -25,18 +26,7 @@
      <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css')}}">
      <link rel="stylesheet" href="{{ url_for('static', filename='css/grid.css')}}">
      <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
-     <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css')}}">
-
-     
-     
-     <script type="text/javascript">
-
- 
-         $(document).ready(function () {
-             $('#task-profile').DataTable();
-         });
-     </script>
-    
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css')}}"> 
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
@@ -372,11 +362,9 @@
                             <div class="row">
                                 <div class="col-4 text-center mb-0 pd-0">
                                     <div class="icon-box">
-                                        <i class='bx bxs-briefcase'></i>
                                     </div>
 
-                                    <h5 class="fs-14 font-w400 mb-0">Total Project</h5>
-                                    <h5 class="mb-2"> <span class="fs-14 font-w600 ">55 +</span> </h5>
+                                    
                                 </div>
                                 <div class="col-4  text-center mb-0 pd-0">
                                     <div class="icon-box">
@@ -384,15 +372,12 @@
                                     </div>
 
                                     <h5 class="fs-14 font-w400 mb-0">Total Task</h5>
-                                    <h5 class="mb-2"> <span class="fs-14 font-w600">35 +</span> </h5>
+                                    <h5 class="mb-2"> <span class="fs-14 font-w600">{{totalTasks.task}} +</span> </h5>
                                 </div>
                                 <div class="col-4 text-center mb-0 pd-0">
                                     <div class="icon-box">
-                                        <i class='bx bxs-trophy'></i>
+                                        
                                     </div>
-
-                                    <h5 class="fs-14 font-w400 mb-0">Awards</h5>
-                                    <h5 class="mb-2"> <span class="fs-14 font-w600 ">03</span> </h5>
                                 </div>
                             </div>
                         </div>
@@ -442,34 +427,6 @@
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
-                    </div>
-                    <div class="box left-dot">
-                        <div class="box-header  border-0 ">
-                            <div class="box-title fs-20 font-w600">Statistics</div>
-                        </div>
-                        <div class="box-body pt-10 ">
-                            <div class="d-flex justify-content-between mt-10">
-                                <div class="progress-cicle">
-                                    <div class="chart-circle chart-circle-xl" data-value="0.75" data-thickness="5" data-color="#E6154E"><canvas width="80" height="80"></canvas><canvas width="80" height="80"></canvas>
-                                        <div class="chart-circle-value">45%</div>
-                                    </div>
-                                    <div class="title-progress fs-15 font-w600 mt-10">Task</div>
-                                </div>
-                                <div class="progress-cicle">
-                                    <div class="chart-circle chart-circle-xl" data-value="0.75" data-thickness="5" data-color="#3C21F7"><canvas width="80" height="80"></canvas><canvas width="80" height="80"></canvas>
-                                        <div class="chart-circle-value">55%</div>
-                                    </div>
-                                    <div class="title-progress fs-15 font-w600 mt-10">Projects</div>
-                                </div>
-                                <div class="progress-cicle">
-                                    <div class="chart-circle chart-circle-xl" data-value="0.75" data-thickness="5" data-color="#E58911"><canvas width="80" height="80"></canvas><canvas width="80" height="80"></canvas>
-                                        <div class="chart-circle-value">75%</div>
-                                    </div>
-                                    <div class="title-progress fs-15 font-w600 mt-10">Performanance</div>
-                                </div>
-                            </div>
-
                         </div>
                     </div>
                 </div>  
